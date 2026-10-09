@@ -6,13 +6,16 @@ describe('safeBrowsing — Unit Tests', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   afterEach(() => {
     global.fetch = originalFetch;
+    vi.unstubAllEnvs();
   });
 
   it('returns unavailable when API key is unconfigured', async () => {
+    vi.stubEnv('SAFEBROWSING_API_KEY', '');
     const result = await checkSafeBrowsing('https://example.com');
     expect(result.status).toBe('unavailable');
     expect(result.threats).toEqual([]);

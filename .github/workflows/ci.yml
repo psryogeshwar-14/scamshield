@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x, 22.x]
 
     env:
       CI: true
@@ -21,8 +21,8 @@ jobs:
       PORT: 3001
       DATABASE_URL: "file:./dev.db"
       CLIENT_URL: "http://localhost:5173"
-      GEMINI_API_KEY: "dummy_test_gemini_key_for_ci_pipeline"
-      SAFEBROWSING_API_KEY: "dummy_test_safebrowsing_key_for_ci"
+      GEMINI_API_KEY: ""
+      SAFEBROWSING_API_KEY: ""
 
     steps:
       - name: Checkout repository
