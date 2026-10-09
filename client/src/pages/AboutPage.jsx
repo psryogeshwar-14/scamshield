@@ -142,7 +142,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-5 pb-12 sm:pb-16 animate-fade-in relative z-10">
+    <div className="w-full px-4 sm:px-8 lg:px-10 xl:px-12 py-5 lg:py-6 animate-fade-in relative z-10">
       {/* Hero Header */}
       <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-8">
         <div className="inline-flex items-center gap-2 p-2.5 rounded-2xl bg-blue-500/10 border border-blue-500/25 mb-4 shadow-[0_0_20px_rgba(59,130,246,0.15)]">

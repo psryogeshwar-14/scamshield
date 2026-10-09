@@ -133,8 +133,8 @@ export default function HomePage() {
   const maxLength = activeTab === 'url' ? 2000 : 5000;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12 sm:pb-16 animate-fade-in relative z-10">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div className="w-full px-4 sm:px-8 lg:px-10 xl:px-12 py-5 lg:py-6 animate-fade-in relative z-10 flex-1 flex flex-col justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-stretch w-full">
         {/* Left Column: Hero, Telemetry & Multi-Layer Threat Evaluation Pipeline */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           <div>
