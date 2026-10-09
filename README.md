@@ -1,8 +1,100 @@
-# 🛡️ ScamShield — Intelligent Cybersecurity Threat Analyzer & Defense Assistant
+# 🛡️ ScamShield — AI-Powered Digital Safety Assistant
 
-> **Hackathon Challenge**: *"Build an intelligent system that identifies or analyzes cybersecurity threats and provides actionable security recommendations."*  
-> **ScamShield's Solution**: An intelligent, multi-layered threat evaluation radar that identifies malicious URLs and social-engineering messages in real time, explains technical threat evidence in plain language, and provides interactive, step-by-step security recommendations.  
-> *Developed for PromptWars X Error Zero Hackathon • Track: AI-Powered Cybersecurity & Digital Safety*
+> **One-line summary**: ScamShield is an explainable AI cybersecurity assistant that detects suspicious URLs and scam messages using Google Safe Browsing, Gemini, and security heuristics, then provides clear, actionable recommendations to help users stay safe online.
+
+ScamShield is an intelligent cybersecurity assistant that helps students identify phishing links, fraudulent websites, scam messages, OTP scams, fake payment requests, and other social-engineering threats before they cause harm.
+
+Users can paste a suspicious URL or message into ScamShield and receive an understandable, evidence-based safety assessment. The platform combines deterministic URL heuristics, Google Safe Browsing reputation checks, and Gemini-powered structured analysis to classify potential threats, explain why they are suspicious, and recommend clear actions such as avoiding the link, refusing to share credentials or OTPs, verifying through an official channel, reporting the sender, or blocking the source.
+
+---
+
+### 🌐 Live Production Links & Status
+
+- **Live Application**: [https://scamshield-kohl.vercel.app](https://scamshield-kohl.vercel.app)
+- **GitHub Repository**: [https://github.com/psryogeshwar-14/scamshield](https://github.com/psryogeshwar-14/scamshield)
+- **CI Quality Gate**: [![CI Quality Gate](https://github.com/psryogeshwar-14/scamshield/actions/workflows/ci.yml/badge.svg)](https://github.com/psryogeshwar-14/scamshield/actions/workflows/ci.yml)
+- **Vercel Project Dashboard**: [https://vercel.com/yogeshwar1/scamshield](https://vercel.com/yogeshwar1/scamshield)
+
+---
+
+### Core capabilities
+
+- **Suspicious URL analysis**: Examines HTTPS usage, IP-based domains, URL shorteners, excessive subdomains, suspicious keywords, unusual patterns, and possible brand impersonation.
+- **Google Safe Browsing integration**: Checks submitted URLs against Google’s continuously updated lists of unsafe resources, including phishing and malware-hosting websites.[[1]](#references)[[2]](#references)
+- **AI-powered scam-message classification**: Identifies patterns associated with phishing, OTP fraud, payment scams, fake job offers, impersonation, malware delivery, and account takeover attempts.
+- **Explainable results**: Separates technical indicators from AI interpretation and presents the findings in simple, student-friendly language.
+- **Actionable recommendations**: Provides immediate safety steps instead of displaying only a risk score.
+- **Structured AI responses**: Gemini returns predictable JSON according to a defined schema, which the application validates before displaying or storing results.[[3]](#references)[[4]](#references)
+- **Analysis history**: Stores previous checks so users can review detected patterns and safety recommendations.
+- **Graceful failure handling**: Clearly distinguishes between a confirmed threat, no known match, insufficient evidence, and an unavailable external service.
+- **Accessible interface**: Supports keyboard navigation, visible focus states, readable contrast, semantic labels, responsive layouts, and risk indicators that do not rely only on color.
+
+---
+
+### How it works
+
+```text
+User submits URL or message
+              ↓
+Input validation and safe normalization
+              ↓
+URL heuristics or scam-pattern analysis
+              ↓
+Google Safe Browsing reputation check
+              ↓
+Gemini structured threat explanation
+              ↓
+Application-level response validation
+              ↓
+Risk level, evidence, explanation, and safety actions
+```
+
+---
+
+### Security and privacy
+
+ScamShield does not ask users for passwords, OTPs, payment details, or unnecessary personal information. API keys are stored on the server through environment variables, user input is validated, external-service failures are handled safely, and the application does not automatically report, block, or execute actions without user confirmation.
+
+ScamShield is a safety-assistance prototype, not a guaranteed malware or phishing detector. A URL that does not appear on a known Safe Browsing list should not automatically be considered safe, because reputation services cannot identify every newly created or undiscovered threat. Google describes Safe Browsing as a service for checking URLs against known unsafe-resource lists, including phishing and malware resources.[[5]](#references)[[1]](#references)
+
+---
+
+### Problem-statement alignment
+
+ScamShield directly addresses the cybersecurity and digital-safety challenge (*"Build an intelligent system that identifies or analyzes cybersecurity threats and provides actionable security recommendations"*) by:
+
+1. Identifying suspicious digital content.
+2. Combining rule-based detection with Google security services and Gemini AI.
+3. Explaining threats to non-technical users.
+4. Providing practical recommendations for safer decisions.
+5. Demonstrating security, accessibility, testing, and responsible AI limitations.
+
+---
+
+### Technology stack
+
+- **Frontend**: React, Vite, Tailwind CSS
+- **Backend**: Node.js, Express
+- **Database**: Prisma with SQLite
+- **AI**: Google Gemini API with structured JSON output
+- **Threat intelligence**: Google Safe Browsing API
+- **Testing**: Unit, integration, frontend, accessibility, and failure-path tests
+- **Deployment**: Frontend and backend deployment with environment-based configuration
+
+---
+
+### One-line version
+
+> **ScamShield is an explainable AI cybersecurity assistant that detects suspicious URLs and scam messages using Google Safe Browsing, Gemini, and security heuristics, then provides clear, actionable recommendations to help users stay safe online.**
+
+---
+
+### References
+- `[1]` [Google Safe Browsing Overview & Documentation](https://developers.google.com/safe-browsing)
+- `[2]` [Google Safe Browsing Lookup API v4](https://developers.google.com/safe-browsing/v4/lookup-api)
+- `[3]` [Google Gemini API Structured Outputs Guide](https://ai.google.dev/gemini-api/docs/structured-output)
+- `[4]` [Google GenAI Official Node.js SDK (`@google/genai`)](https://www.npmjs.com/package/@google/genai)
+- `[5]` [Google Safe Browsing Transparency & Advisory](https://safebrowsing.google.com/)
 
 ---
 
@@ -16,7 +108,7 @@ npm run dev
 # Frontend: http://localhost:5173  |  Backend API: http://localhost:3001
 ```
 
-1. **Open** `http://localhost:5173` in your browser.
+1. **Open** `https://scamshield-kohl.vercel.app` (Live) or `http://localhost:5173` (Local).
 2. **Click** any preset under **"One-Click Evaluation Scenarios"**:
    - `PayPal Phishing Domain` (URL Threat)
    - `Urgent Bank Block Threat` (Message / OTP Threat)
@@ -25,38 +117,6 @@ npm run dev
    - 🎯 **Cybersecurity Threat Identified**: Visual Risk Severity (`Critical Hazard`), Classification (`Phishing / Impersonation`), and Calibrated Risk Score (`85/100`).
    - 💡 **Evidence Explained in Plain Language**: Transparent 4-pillar breakdown (`Deterministic Heuristics`, `Google Safe Browsing v4 Feed`, `Gemini AI Intent Reasoning`, and `Confidence Limitations`).
    - 🛡️ **Actionable Security Recommendations**: High-priority **Immediate Directive** banner + **Interactive Safety Checklist** with toggleable checkboxes and persistent progress tracking.
-
----
-
-## 1. Problem Statement Alignment
-
-ScamShield addresses the exact challenge prompt:  
-**"Build an intelligent system that identifies or analyzes cybersecurity threats and provides actionable security recommendations."**
-
-Today's digital citizens, particularly students and young professionals, face sophisticated social engineering that exposes three critical industry gaps:
-
-1. **The Detection Gap**: Traditional antiviruses and DNS filters rely on retroactive cataloging. They miss newly minted zero-day phishing domains and non-URL messaging fraud (SMS urgency extortion, OTP harvesting, advance-fee Telegram traps).
-2. **The Communication Gap**: Existing security tools output cryptic jargon (*"Shannon entropy 4.2"*, *"Punycode xn-- spoof"* or raw HTTP codes). Users cannot understand the nature of the hazard.
-3. **The Actionability Gap**: Most security products stop at a passive warning badge (*"Malicious - Proceed at your own risk"*), leaving panicked victims with no guidance on how to secure their accounts.
-
----
-
-## 2. Solution Statement
-
-**ScamShield** bridges deterministic structural heuristics, live reputation intelligence, and generative AI reasoning into a coherent, resilient cyber defense assistant:
-
-1. **Multi-Vector Threat Analysis**:
-   - **URL Analysis Pipeline**: Analyzes 11 structural features (<2ms) including IP-based hosts, punycode lookalikes, URL shorteners, excessive subdomains, suspicious TLDs, and protocol downgrades.
-   - **Reputation Intelligence**: Cross-references the Google Safe Browsing Lookup v4 API, gracefully reporting `"unavailable"` when unconfigured or offline rather than assuming safety.
-   - **Message Analysis Pipeline**: Evaluates urgency manipulation, OTP theft patterns, reverse QR code / UPI traps, advance-fee employment fraud, and executable sideloads.
-2. **Plain-Language Evidence Explanation**:
-   - Translates raw metrics into everyday concepts through a dedicated **Plain-Language Explanation** card and a transparent **"Why This Result?"** 4-pillar evidence breakdown.
-3. **Actionable Security Recommendations**:
-   - Delivers a single, unequivocal **Recommended Immediate Directive** to prevent immediate harm.
-   - Generates an **Interactive Defensive Checklist** with checkable steps saved to SQLite via Prisma for continuous threat remediation.
-   - Provides a one-click **Shareable Advisory** for campus group alerts and direct escalation to the **National Cyber Crime Helpline (1930)**.
-4. **Guaranteed Offline Resilience**:
-   - If external APIs (Gemini or Safe Browsing) are offline, rate-limited, or unconfigured, ScamShield’s deterministic fallback engine activates automatically, guaranteeing zero downtime or blind spots.
 
 ---
 

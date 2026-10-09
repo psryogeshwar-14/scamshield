@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "ScamShield — AI-powered digital safety assistant for analyzing suspicious URLs and fraudulent messages.",
+  "description": "ScamShield is an explainable AI cybersecurity assistant that detects suspicious URLs and scam messages using Google Safe Browsing, Gemini, and security heuristics, then provides clear, actionable recommendations to help users stay safe online.",
   "scripts": {
     "setup": "node -e \"import('fs').then(fs => { if(!fs.existsSync('server/.env') && fs.existsSync('.env.example')) fs.copyFileSync('.env.example', 'server/.env'); });\" && npm --prefix server install && npm --prefix client install && npm --prefix server run prisma:generate && npm --prefix server run prisma:deploy",
     "dev:server": "npm --prefix server run dev",
