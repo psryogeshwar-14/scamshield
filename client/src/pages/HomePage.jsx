@@ -133,74 +133,65 @@ export default function HomePage() {
   const maxLength = activeTab === 'url' ? 2000 : 5000;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 animate-fade-in relative z-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-2 sm:pt-4 pb-12 sm:pb-16 animate-fade-in relative z-10">
       {/* Hero Header */}
-      <div className="text-center max-w-3xl mx-auto mb-10">
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/25 text-xs font-semibold text-blue-400 mb-5 shadow-[0_0_20px_rgba(59,130,246,0.15)] animate-float">
-          <span className="relative flex h-2 w-2">
+      <div className="text-center max-w-2xl mx-auto mb-4 sm:mb-5">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[11px] font-semibold text-blue-400 mb-2 shadow-[0_0_15px_rgba(59,130,246,0.15)] animate-float">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
           </span>
-          <span className="font-mono tracking-wide uppercase">Cybersecurity Threat Analyzer & Defense Assistant</span>
+          <span className="font-mono tracking-wider uppercase">Cybersecurity Threat Defense Assistant</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-5 font-heading">
+        <h1 className="text-2xl sm:text-3xl lg:text-[38px] font-black tracking-tight text-white mb-2 font-heading leading-tight">
           Verify Links & Messages <br className="hidden sm:inline" />
           <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
             Before You Trust Them
           </span>
         </h1>
 
-        <p className="text-slate-400 text-sm sm:text-lg leading-relaxed max-w-2xl mx-auto">
+        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto mb-3">
           ScamShield identifies and analyzes cybersecurity threats across suspicious URLs and digital messages,
           translates technical evidence into plain language, and provides actionable, step-by-step security recommendations.
         </p>
 
         {/* Live Telemetry Ticker Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 mt-8 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto">
-          <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 text-left">
-            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">Engine</span>
-            <span className="text-xs sm:text-sm font-bold text-slate-200 flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              11 Heuristics
-            </span>
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 mb-2 text-[11px] font-mono">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/70 border border-slate-800 text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-slate-400">Engine:</span>
+            <span className="font-bold text-slate-200">11 Heuristics</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 text-left">
-            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">Google Safe</span>
-            <span className="text-xs sm:text-sm font-bold text-blue-400 flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-              Lookup v4 Live
-            </span>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/70 border border-slate-800 text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+            <span className="text-slate-400">Safe Browsing:</span>
+            <span className="font-bold text-blue-400">Lookup v4 Live</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 text-left">
-            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">AI Model</span>
-            <span className="text-xs sm:text-sm font-bold text-indigo-300 flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
-              Gemini 2.5 Flash
-            </span>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/70 border border-slate-800 text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            <span className="text-slate-400">AI:</span>
+            <span className="font-bold text-indigo-300">Gemini 2.5 Flash</span>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 text-left">
-            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block">Zero Log</span>
-            <span className="text-xs sm:text-sm font-bold text-slate-300 flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-              Privacy Shield
-            </span>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900/70 border border-slate-800 text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+            <span className="font-bold text-slate-300">Privacy Shield</span>
           </div>
         </div>
       </div>
 
       {/* Main Analyzer Card */}
-      <div className="glass-panel-elevated rounded-3xl p-5 sm:p-8 backdrop-blur-2xl relative overflow-hidden transition-all duration-300">
+      <div className="glass-panel-elevated rounded-2xl sm:rounded-3xl p-4 sm:p-6 backdrop-blur-2xl relative overflow-hidden transition-all duration-300">
         {/* Glow orb background accents */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-10 left-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 left-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Tab selection */}
         <div
-          className="flex p-1.5 bg-slate-950/80 rounded-2xl border border-slate-800/80 mb-6 relative"
+          className="grid grid-cols-2 p-1 bg-slate-950/90 rounded-xl border border-slate-800/90 mb-3.5 relative"
           role="tablist"
           aria-label="Target type selector"
         >
@@ -209,10 +200,10 @@ export default function HomePage() {
             role="tab"
             aria-selected={activeTab === 'url'}
             onClick={() => handleTabChange('url')}
-            className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`py-2 sm:py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer ${
               activeTab === 'url'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 border border-blue-400/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
             }`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -226,10 +217,10 @@ export default function HomePage() {
             role="tab"
             aria-selected={activeTab === 'message'}
             onClick={() => handleTabChange('message')}
-            className={`flex-1 py-3 px-4 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+            className={`py-2 sm:py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer ${
               activeTab === 'message'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/50'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25 border border-blue-400/30'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
             }`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -241,7 +232,7 @@ export default function HomePage() {
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-6">
+          <div className="mb-4">
             <ErrorAlert
               title="Inspection Notice"
               message={error}
@@ -251,13 +242,13 @@ export default function HomePage() {
         )}
 
         {/* Form Area */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
           <div>
             {/* Input Header with Actions */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-1.5">
               <label
                 htmlFor="target-input"
-                className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-2"
+                className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5"
               >
                 <span>{activeTab === 'url' ? 'Suspicious URL to Analyze' : 'Message, SMS, or Email Text'}</span>
                 <span className="text-[11px] font-normal text-slate-400">
@@ -269,7 +260,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={handlePasteClipboard}
-                  className="text-xs text-blue-400 hover:text-blue-300 font-medium px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 hover:border-blue-500/40 transition-colors flex items-center gap-1"
+                  className="text-[11px] text-blue-400 hover:text-blue-300 font-medium px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 hover:border-blue-500/40 transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -281,13 +272,13 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={() => setInput('')}
-                    className="text-xs text-slate-400 hover:text-slate-200 font-medium px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 transition-colors"
+                    className="text-[11px] text-slate-400 hover:text-slate-200 font-medium px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 transition-colors cursor-pointer"
                   >
                     Clear
                   </button>
                 )}
 
-                <span className="text-xs font-mono text-slate-400">
+                <span className="text-[11px] font-mono text-slate-400">
                   {input.length}/{maxLength}
                 </span>
               </div>
@@ -309,14 +300,14 @@ export default function HomePage() {
                   }}
                   disabled={loading}
                   maxLength={maxLength}
-                  className="w-full px-4.5 py-4 bg-slate-950/90 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 text-sm sm:text-base font-mono transition-all shadow-inner"
+                  className="w-full px-3.5 py-3 bg-slate-950/90 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 text-xs sm:text-sm font-mono transition-all shadow-inner"
                 />
               </div>
             ) : (
               <div className="relative">
                 <textarea
                   id="target-input"
-                  rows={5}
+                  rows={3}
                   placeholder="Paste the SMS, WhatsApp message, urgent email, or part-time job offer here. Include any links or payment instructions..."
                   value={input}
                   onChange={(e) => {
@@ -325,12 +316,12 @@ export default function HomePage() {
                   }}
                   disabled={loading}
                   maxLength={maxLength}
-                  className="w-full px-4.5 py-4 bg-slate-950/90 border border-slate-800 rounded-2xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 text-sm sm:text-base leading-relaxed transition-all shadow-inner resize-y font-sans"
+                  className="w-full px-3.5 py-2.5 bg-slate-950/90 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60 focus:border-blue-500 text-xs sm:text-sm leading-relaxed transition-all shadow-inner resize-y font-sans"
                 />
               </div>
             )}
 
-            <p className="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
+            <p className="mt-1.5 text-[11px] text-slate-400 flex items-center gap-1.5">
               <span className="text-blue-400 font-bold" aria-hidden="true">ℹ</span>
               <span>
                 {activeTab === 'url'
@@ -341,39 +332,40 @@ export default function HomePage() {
           </div>
 
           {/* Quick Test Sample Cards */}
-          <div className="pt-2">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2.5 font-mono">
+          <div className="pt-1">
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 font-mono">
               One-Click Evaluation Scenarios (30s Quick Demo):
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
               {EXAMPLES.map((ex, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => handleApplyExample(ex)}
                   disabled={loading}
-                  className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/90 hover:border-blue-500/40 text-left transition-all active:scale-[0.98] group flex items-start gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  className="p-2 sm:p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/90 hover:border-blue-500/40 text-left transition-all active:scale-[0.98] group flex flex-col gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer"
                 >
-                  <span className={`text-[11px] font-mono font-bold uppercase px-2 py-0.5 rounded-md border shrink-0 mt-0.5 ${ex.badgeColor}`}>
-                    {ex.category}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-xs sm:text-sm font-semibold text-slate-200 group-hover:text-blue-300 block truncate transition-colors">
-                      {ex.label}
+                  <div className="flex items-center justify-between gap-1 w-full">
+                    <span className={`text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded border shrink-0 ${ex.badgeColor}`}>
+                      {ex.category}
                     </span>
-                    <span className="text-[11px] text-slate-400 block truncate">
-                      {ex.description}
-                    </span>
+                    <span className="text-[10px] font-mono text-slate-400 uppercase">{ex.type}</span>
                   </div>
+                  <span className="text-xs font-semibold text-slate-200 group-hover:text-blue-300 block truncate transition-colors">
+                    {ex.label}
+                  </span>
+                  <span className="text-[10px] text-slate-400 block truncate">
+                    {ex.description}
+                  </span>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Submit / High-Tech Radar Scanning Indicator */}
-          <div className="pt-3">
+          <div className="pt-2 sm:pt-3">
             {loading ? (
-              <div className="py-6 px-4 rounded-2xl bg-slate-950/80 border border-blue-500/30 flex flex-col items-center justify-center animate-fade-in shadow-xl">
+              <div className="py-5 px-4 rounded-xl bg-slate-950/80 border border-blue-500/30 flex flex-col items-center justify-center animate-fade-in shadow-xl">
                 <LoadingSpinner
                   message="Active Threat Assessment"
                   submessage={SCAN_STEPS[stepIndex]}
@@ -383,9 +375,9 @@ export default function HomePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 px-6 rounded-2xl font-black text-base text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 hover:from-blue-500 hover:via-indigo-500 hover:to-sky-400 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_25px_rgba(59,130,246,0.35)] transition-all flex items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 font-heading cursor-pointer"
+                className="w-full py-3 sm:py-3.5 px-6 rounded-xl font-black text-sm sm:text-base text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 hover:from-blue-500 hover:via-indigo-500 hover:to-sky-400 active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_0_20px_rgba(59,130,246,0.35)] transition-all flex items-center justify-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 font-heading cursor-pointer"
               >
-                <ShieldIcon size={20} color="#ffffff" />
+                <ShieldIcon size={18} color="#ffffff" />
                 <span>Launch Threat Analysis</span>
                 <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -397,57 +389,57 @@ export default function HomePage() {
       </div>
 
       {/* Educational Protection Features Grid */}
-      <div className="mt-12">
-        <h2 className="text-xl sm:text-2xl font-black text-white text-center font-heading mb-6">
+      <div className="mt-8 sm:mt-10">
+        <h2 className="text-lg sm:text-xl font-black text-white text-center font-heading mb-4 sm:mb-6">
           Multi-Layer Threat Evaluation Pipeline
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
+            <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-3">
+              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <h3 className="text-sm sm:text-base font-bold text-slate-100 mb-1.5 font-heading">
+              1. Structural Heuristics
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Unpacks IP hostnames, domain entropy, homoglyph lookalikes, URL shorteners, and urgent keyword triggers instantly.
+            </p>
           </div>
-          <h3 className="text-base font-bold text-slate-100 mb-2 font-heading">
-            1. Structural Heuristics
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            Unpacks IP hostnames, domain entropy, homoglyph lookalikes, URL shorteners, and urgent keyword triggers instantly.
-          </p>
-        </div>
 
-        <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-            </svg>
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
+            <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3">
+              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+            </div>
+            <h3 className="text-sm sm:text-base font-bold text-slate-100 mb-1.5 font-heading">
+              2. Google Safe Browsing v4
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Cross-references global threat feeds for malware distribution, deceptive websites, and known exploit kits.
+            </p>
           </div>
-          <h3 className="text-base font-bold text-slate-100 mb-2 font-heading">
-            2. Google Safe Browsing v4
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            Cross-references global threat feeds for malware distribution, deceptive websites, and known exploit kits.
-          </p>
-        </div>
 
-        <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
-          <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-4">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+          <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
+            <div className="w-9 h-9 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3">
+              <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-sm sm:text-base font-bold text-slate-100 mb-1.5 font-heading">
+              3. Actionable AI Defense
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Gemini synthesizes findings into simple plain English with a step-by-step checklist to keep your student accounts secure.
+            </p>
           </div>
-          <h3 className="text-base font-bold text-slate-100 mb-2 font-heading">
-            3. Actionable AI Defense
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-            Gemini synthesizes findings into simple plain English with a step-by-step checklist to keep your student accounts secure.
-          </p>
         </div>
       </div>
-    </div>
 
       {/* Safety Notice Footer */}
-      <div className="mt-12 text-center text-xs text-slate-400 max-w-xl mx-auto space-y-1 font-mono">
+      <div className="mt-8 text-center text-xs text-slate-400 max-w-xl mx-auto space-y-1 font-mono">
         <p>🔒 Privacy Protected: We never store your passwords, PINs, or private credentials.</p>
         <p>
           ScamShield provides automated heuristic and AI safety guidance for educational prevention.

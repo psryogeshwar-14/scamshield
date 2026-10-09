@@ -57,23 +57,23 @@ body {
   overflow-x: hidden;
 }
 
-/* Cyber Matrix Background Grid */
+/* Cyber Ambient Glow + Grid */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 10%, black 40%, transparent 95%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 10%, black 40%, transparent 95%);
+    radial-gradient(circle at 50% -10%, rgba(59, 130, 246, 0.15), transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(99, 102, 241, 0.08), transparent 35%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
   pointer-events: none;
   z-index: 0;
 }
 
 /* ── Scrollbar ──────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #060913; }
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #334155; }
@@ -103,18 +103,18 @@ a:hover { text-decoration: none; }
 
 /* ── Glassmorphism & Cyber Card Utilities ───────────────────────────────── */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.72);
+  background: rgba(13, 19, 36, 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .glass-panel-elevated {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(59, 130, 246, 0.25);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px -10px rgba(59, 130, 246, 0.15);
+  background: rgba(11, 16, 32, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.75), 0 0 25px -10px rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .glow-blue {

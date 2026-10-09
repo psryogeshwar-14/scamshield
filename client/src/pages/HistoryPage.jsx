@@ -124,7 +124,7 @@ export default function HistoryPage() {
   const highRiskCount = history.filter((h) => h.riskLevel === 'high_risk').length;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 animate-fade-in relative z-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-3 sm:pt-5 pb-12 sm:pb-16 animate-fade-in relative z-10">
       {/* Title & Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
