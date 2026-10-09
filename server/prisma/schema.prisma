@@ -1,0 +1,41 @@
+// Prisma schema for ScamShield
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Stores every URL / message analysis performed by the user
+model ThreatCheck {
+  id                  String   @id @default(cuid())
+  inputType           String   // "url" | "message"
+  userInput           String
+  riskLevel           String   // "safe" | "suspicious" | "high_risk"
+  threatType          String?  // e.g. "phishing", "malware", "scam", "none"
+  confidence          Float?   // 0.0 – 1.0
+  summary             String?  // Plain-language explanation from Gemini
+  evidenceJson        String?  // JSON string: array of evidence points
+  recommendedAction   String?  // Top recommended action
+  safetyStepsJson     String?  // JSON string: array of safety step strings
+  safeBrowsingResult  String?  // JSON string: raw Safe Browsing API response
+  createdAt           DateTime @default(now())
+
+  // Relation to individual safety recommendation items
+  safetyRecommendations SafetyRecommendation[]
+}
+
+// Tracks individual actionable safety steps per analysis
+model SafetyRecommendation {
+  id            String      @id @default(cuid())
+  threatCheckId String
+  action        String      // The safety step description
+  completed     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+
+  threatCheck   ThreatCheck @relation(fields: [threatCheckId], references: [id], onDelete: Cascade)
+}

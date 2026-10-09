@@ -1,0 +1,34 @@
+{
+  "name": "scamshield-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ScamShield — AI-powered digital safety assistant for analyzing suspicious URLs and fraudulent messages.",
+  "scripts": {
+    "setup": "node -e \"const fs=require('fs'); if(!fs.existsSync('server/.env') && fs.existsSync('.env.example')) fs.copyFileSync('.env.example', 'server/.env');\" && npm --prefix server install && npm --prefix client install && npm --prefix server run prisma:generate && npm --prefix server run prisma:deploy",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev": "npm --prefix server run dev & npm --prefix client run dev",
+    "test:server": "npm --prefix server test",
+    "test:client": "npm --prefix client test",
+    "test": "npm run test:server && npm run test:client",
+    "test:coverage:server": "npm --prefix server run test:coverage",
+    "test:coverage:client": "npm --prefix client run test:coverage",
+    "test:coverage": "npm run test:coverage:server && npm run test:coverage:client",
+    "lint:server": "npm --prefix server run lint",
+    "lint:client": "npm --prefix client run lint",
+    "lint": "npm run lint:server && npm run lint:client",
+    "build:client": "npm --prefix client run build",
+    "build:server": "npm --prefix server run build",
+    "build": "npm run build:client && npm run build:server"
+  },
+  "keywords": [
+    "cybersecurity",
+    "anti-phishing",
+    "scam-detection",
+    "gemini-ai",
+    "safe-browsing",
+    "hackathon"
+  ],
+  "author": "ScamShield Team",
+  "license": "MIT"
+}

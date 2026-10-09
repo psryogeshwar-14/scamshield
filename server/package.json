@@ -1,0 +1,48 @@
+{
+  "name": "scamshield-server",
+  "version": "1.0.0",
+  "description": "ScamShield backend — Express + Prisma + SQLite",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "build": "npx prisma generate",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "oxlint src",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:generate": "prisma generate",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@google/genai": "^2.28.0",
+    "@prisma/client": "^5.22.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^8.7.1",
+    "express-validator": "^7.2.0",
+    "helmet": "^8.3.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.0.3",
+    "oxlint": "^1.87.0",
+    "prisma": "^5.22.0",
+    "supertest": "^7.3.1",
+    "vitest": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "allowScripts": {
+    "@prisma/client@5.22.0": true,
+    "@prisma/engines@5.22.0": true,
+    "prisma@5.22.0": true
+  }
+}
