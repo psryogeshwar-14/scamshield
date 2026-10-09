@@ -1,0 +1,44 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  audit-and-test:
+    name: Lint, Test & Build Quality Gate
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies & generate Prisma client
+        run: npm run setup
+
+      - name: Static Analysis & Linting (oxlint)
+        run: npm run lint
+
+      - name: Execute Automated Test Suites (83 Tests)
+        run: npm test
+
+      - name: Measure Code Coverage
+        run: npm run test:coverage
+
+      - name: Build Production Client & Server
+        run: npm run build
+
+      - name: Dependency Vulnerability Audit
+        run: npm audit --audit-level=high
