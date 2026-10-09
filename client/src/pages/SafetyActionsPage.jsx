@@ -111,7 +111,7 @@ export default function SafetyActionsPage() {
   const progress = steps.length > 0 ? Math.round((completedCount / steps.length) * 100) : 0;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-3 sm:pt-5 pb-12 sm:pb-16 animate-fade-in relative z-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-5 pb-12 sm:pb-16 animate-fade-in relative z-10">
       <div className="flex items-center justify-between gap-4 mb-6">
         <Link
           to={`/result/${id}`}

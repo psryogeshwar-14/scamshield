@@ -36,8 +36,8 @@ export default function App() {
               </Routes>
             </Suspense>
           </main>
-          <footer className="py-8 border-t border-slate-900/80 bg-slate-950/70 backdrop-blur-md text-xs text-slate-500 mt-auto relative z-10">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <footer className="py-6 sm:py-8 border-t border-slate-900/80 bg-slate-950/70 backdrop-blur-md text-xs text-slate-500 mt-auto relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="font-mono text-slate-400">ScamShield v1.0 • PromptWars X Error Zero</span>
