@@ -316,7 +316,7 @@ cp .env.example server/.env
 | `PORT` | Optional | `3001` | Backend HTTP port |
 | `NODE_ENV` | Optional | `development` | Runtime environment (`development` / `production` / `test`) |
 | `CLIENT_URL` | Optional | `http://localhost:5173` | Allowed CORS frontend origin |
-| `DATABASE_URL` | Yes | `file:./prisma/dev.db` | SQLite database connection string |
+| `DATABASE_URL` | Yes | `file:./dev.db` | SQLite database connection string |
 | `GEMINI_API_KEY` | Optional | *(empty)* | Google Gemini API key (enables AI analysis; fallback used if absent) |
 | `SAFEBROWSING_API_KEY` | Optional | *(empty)* | Google Safe Browsing API key (feed returns `unavailable` if absent) |
 

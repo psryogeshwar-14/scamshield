@@ -16,7 +16,7 @@ export const IS_PRODUCTION = NODE_ENV === 'production';
 export const IS_TEST = NODE_ENV === 'test';
 
 export function getDatabaseUrl() {
-  return process.env.DATABASE_URL || 'file:./prisma/dev.db';
+  return process.env.DATABASE_URL || 'file:./dev.db';
 }
 export const DATABASE_URL = getDatabaseUrl();
 

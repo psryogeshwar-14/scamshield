@@ -15,7 +15,7 @@ COPY src ./src/
 
 ENV NODE_ENV=production
 ENV PORT=3001
-ENV DATABASE_URL="file:./prisma/dev.db"
+ENV DATABASE_URL="file:./dev.db"
 
 EXPOSE 3001
 

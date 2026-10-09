@@ -19,7 +19,7 @@ jobs:
       CI: true
       NODE_ENV: test
       PORT: 3001
-      DATABASE_URL: "file:./prisma/dev.db"
+      DATABASE_URL: "file:./dev.db"
       CLIENT_URL: "http://localhost:5173"
       GEMINI_API_KEY: "dummy_test_gemini_key_for_ci_pipeline"
       SAFEBROWSING_API_KEY: "dummy_test_safebrowsing_key_for_ci"
