@@ -1,4 +1,4 @@
-import { IS_PRODUCTION, IS_TEST } from '../config/index.js';
+import { IS_TEST } from '../config/index.js';
 import logger from '../utils/logger.js';
 
 /**
@@ -30,6 +30,30 @@ export function globalErrorHandler(err, req, res, _next) {
     logger.error(`${req.method} ${req.path} [${requestId}] failed (${status}): ${err.message}`, err);
   }
 
+  // Handle CORS policy violations with HTTP 403 Forbidden
+  if (err.message && err.message.includes('CORS policy does not allow access')) {
+    return res.status(403).json({
+      success: false,
+      error: {
+        message: 'Cross-Origin Request Blocked: Origin not permitted by ScamShield CORS policy.',
+        code: 'CORS_FORBIDDEN',
+        requestId,
+      },
+    });
+  }
+
+  // Mask database / Prisma operational errors to prevent schema leakage
+  if (err.name?.startsWith('Prisma') || (typeof err.code === 'string' && err.code.startsWith('P'))) {
+    return res.status(500).json({
+      success: false,
+      error: {
+        message: 'A secure database operation could not be completed.',
+        code: 'DATABASE_ERROR',
+        requestId,
+      },
+    });
+  }
+
   // Friendly human-readable translation for common network and protocol issues
   if (status === 429) {
     message = 'You have submitted too many safety checks in a short period. Please pause for a few minutes before trying again.';
@@ -43,7 +67,7 @@ export function globalErrorHandler(err, req, res, _next) {
   } else if (err.type === 'entity.too.large') {
     message = 'Request payload exceeds maximum allowed size (50KB).';
     code = 'PAYLOAD_TOO_LARGE';
-  } else if (status >= 500 && IS_PRODUCTION) {
+  } else if (status >= 500) {
     message = 'An internal safety analysis error occurred. Please try again in a few moments.';
     code = 'SERVER_ERROR';
   }

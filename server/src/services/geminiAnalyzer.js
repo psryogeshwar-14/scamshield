@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from '@google/genai';
-import { isGeminiConfigured, TIMEOUTS } from '../config/index.js';
+import { isGeminiConfigured, getGeminiApiKey, TIMEOUTS } from '../config/index.js';
 import logger from '../utils/logger.js';
 
 /**
@@ -429,7 +429,7 @@ export async function analyzeMessageWithGemini(message) {
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
     const prompt = `
 Analyze the following user-submitted message for security threats and scams.
 
@@ -454,11 +454,17 @@ Explain in simple terms for students and return strictly according to responseSc
       },
     });
 
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`Gemini API timed out after ${TIMEOUTS.GEMINI_MS}ms`)), TIMEOUTS.GEMINI_MS)
-    );
+    let timeoutId;
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error(`Gemini API timed out after ${TIMEOUTS.GEMINI_MS}ms`)), TIMEOUTS.GEMINI_MS);
+    });
 
-    const response = await Promise.race([apiPromise, timeoutPromise]);
+    let response;
+    try {
+      response = await Promise.race([apiPromise, timeoutPromise]);
+    } finally {
+      clearTimeout(timeoutId);
+    }
     const parsed = JSON.parse(response.text);
     return sanitizeResult(parsed, 'message');
   } catch (err) {
@@ -479,7 +485,7 @@ export async function analyzeUrlWithGemini(url, heuristics, safeBrowsing) {
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey: getGeminiApiKey() });
     const prompt = `
 Explain the security posture of this URL based on the factual evidence provided below.
 DO NOT invent facts not supported by the evidence.
@@ -512,11 +518,17 @@ Return strictly according to responseSchema.
       },
     });
 
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`Gemini API timed out after ${TIMEOUTS.GEMINI_MS}ms`)), TIMEOUTS.GEMINI_MS)
-    );
+    let timeoutId;
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error(`Gemini API timed out after ${TIMEOUTS.GEMINI_MS}ms`)), TIMEOUTS.GEMINI_MS);
+    });
 
-    const response = await Promise.race([apiPromise, timeoutPromise]);
+    let response;
+    try {
+      response = await Promise.race([apiPromise, timeoutPromise]);
+    } finally {
+      clearTimeout(timeoutId);
+    }
     const parsed = JSON.parse(response.text);
     return sanitizeResult(parsed, 'url');
   } catch (err) {

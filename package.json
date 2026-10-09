@@ -2,9 +2,10 @@
   "name": "scamshield-workspace",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "ScamShield — AI-powered digital safety assistant for analyzing suspicious URLs and fraudulent messages.",
   "scripts": {
-    "setup": "node -e \"const fs=require('fs'); if(!fs.existsSync('server/.env') && fs.existsSync('.env.example')) fs.copyFileSync('.env.example', 'server/.env');\" && npm --prefix server install && npm --prefix client install && npm --prefix server run prisma:generate && npm --prefix server run prisma:deploy",
+    "setup": "node -e \"import('fs').then(fs => { if(!fs.existsSync('server/.env') && fs.existsSync('.env.example')) fs.copyFileSync('.env.example', 'server/.env'); });\" && npm --prefix server install && npm --prefix client install && npm --prefix server run prisma:generate && npm --prefix server run prisma:deploy",
     "dev:server": "npm --prefix server run dev",
     "dev:client": "npm --prefix client run dev",
     "dev": "npm --prefix server run dev & npm --prefix client run dev",
@@ -17,9 +18,13 @@
     "lint:server": "npm --prefix server run lint",
     "lint:client": "npm --prefix client run lint",
     "lint": "npm run lint:server && npm run lint:client",
+    "audit": "npm --prefix server audit && npm --prefix client audit",
     "build:client": "npm --prefix client run build",
     "build:server": "npm --prefix server run build",
-    "build": "npm run build:client && npm run build:server"
+    "build": "npm run build:client && npm run build:server",
+    "build:vercel": "npm --prefix server run prisma:generate && npm --prefix server run prisma:deploy && npm --prefix client run build",
+    "db:migrate": "npm --prefix server run prisma:deploy",
+    "db:seed": "npm --prefix server run db:seed"
   },
   "keywords": [
     "cybersecurity",

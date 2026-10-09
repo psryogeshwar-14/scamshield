@@ -86,4 +86,60 @@ describe('safeBrowsing — Unit Tests', () => {
     expect(result.status).toBe('unavailable');
     expect(result.error).toContain('Network error');
   });
+
+  it('handles HTTP 403 API key permission errors gracefully', async () => {
+    vi.stubEnv('SAFEBROWSING_API_KEY', 'TEST_SAFEBROWSING_KEY_12345');
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 403,
+      text: async () => 'The caller does not have permission for Safe Browsing API',
+    });
+
+    const result = await checkSafeBrowsing('https://example.com');
+    expect(result.status).toBe('unavailable');
+    expect(result.error).toContain('403');
+    expect(result.details).toContain('permission');
+  });
+
+  it('handles arbitrary 5xx upstream server errors gracefully', async () => {
+    vi.stubEnv('SAFEBROWSING_API_KEY', 'TEST_SAFEBROWSING_KEY_12345');
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 503,
+    });
+
+    const result = await checkSafeBrowsing('https://example.com');
+    expect(result.status).toBe('unavailable');
+    expect(result.error).toContain('503');
+  });
+
+  it('handles AbortError timeout signals without throwing', async () => {
+    vi.stubEnv('SAFEBROWSING_API_KEY', 'TEST_SAFEBROWSING_KEY_12345');
+
+    const abortError = new Error('The operation was aborted');
+    abortError.name = 'AbortError';
+    global.fetch = vi.fn().mockRejectedValue(abortError);
+
+    const result = await checkSafeBrowsing('https://example.com');
+    expect(result.status).toBe('unavailable');
+    expect(result.error).toContain('timed out');
+  });
+
+  it('handles malformed / non-JSON responses from Safe Browsing endpoint', async () => {
+    vi.stubEnv('SAFEBROWSING_API_KEY', 'TEST_SAFEBROWSING_KEY_12345');
+
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => {
+        throw new SyntaxError('Unexpected token < in JSON at position 0');
+      },
+    });
+
+    const result = await checkSafeBrowsing('https://example.com');
+    expect(result.status).toBe('unavailable');
+    expect(result.error).toContain('JSON');
+  });
 });

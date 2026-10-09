@@ -54,7 +54,7 @@
 | **00:15 - 00:35** | Click **"PayPal Phishing Domain"** sample chip → Click **"Launch Threat Analysis"** | *"Watch what happens when a student pastes a suspicious link. In under 2 seconds, ScamShield’s hybrid engine kicks in: our 11-point deterministic heuristics evaluate the domain structure, query threat intelligence feeds, and feed the structural signals into Gemini 2.5 Flash."* |
 | **00:35 - 00:55** | Arrive on **Result Page**; highlight **Why This Result?** | *"Instead of giving a mysterious black-box number, ScamShield gives transparency: our 'Why This Result?' section breaks down the exact heuristic flags — unencrypted HTTP, suspicious .xyz TLD, and brand impersonation — alongside plain-language AI reasoning."* |
 | **00:55 - 01:15** | Click checkboxes on **Interactive Safety Checklist** | *"Crucially, detection is only half the battle. ScamShield gives users an interactive mitigation checklist: 'Do not enter passwords', 'Close tab', 'Verify independently'. As the student takes action, progress updates and syncs directly to their private audit log."* |
-| **01:15 - 01:30** | Switch to **History Log** & conclude | *"Behind the scenes, we enforce strict zero-server-fetch security — our server never visits user URLs, inputs are redacted in logs, and we have 83 passing automated tests. ScamShield is real-time, privacy-first cybersecurity that students can actually understand."* |
+| **01:15 - 01:30** | Switch to **History Log** & conclude | *"Behind the scenes, we enforce strict zero-server-fetch security — our server never visits user URLs, inputs are redacted in logs, and we have 144 passing automated tests with 0 accessibility violations. ScamShield turns fear into actionable defense."* |
 
 ---
 

@@ -5,11 +5,7 @@ export function useToast() {
   const context = useContext(ToastContext);
   if (!context) {
     return {
-      addToast: (msg) => {
-        if (typeof console !== 'undefined') {
-          console.log('[Toast]', msg);
-        }
-      },
+      addToast: () => {},
       removeToast: () => {},
     };
   }

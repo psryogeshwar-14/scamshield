@@ -16,8 +16,8 @@ export const historyQueryValidation = [
     .toInt(),
   query('type')
     .optional()
-    .isIn(['url', 'message'])
-    .withMessage('type filter must be either "url" or "message".'),
+    .isIn(['url', 'message', 'high_risk', 'all'])
+    .withMessage('type filter must be "url", "message", "high_risk", or "all".'),
 ];
 
 /**

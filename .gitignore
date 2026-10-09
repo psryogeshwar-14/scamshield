@@ -60,3 +60,11 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# Temporary and Upload Directories
+server/uploads/
+client/.vite/
+playwright-report/
+test-results/
+.vercel/
+

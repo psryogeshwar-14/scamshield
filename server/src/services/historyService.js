@@ -4,7 +4,7 @@ import { createError } from '../middleware/errorHandler.js';
 /**
  * Retrieves paginated threat check history records ordered newest-first.
  */
-export async function getHistoryRecords({ page = 1, limit = 20, type = null } = {}) {
+export async function getHistoryRecords({ page = 1, limit = 20, type = null, includeRecommendations = false } = {}) {
   const safePage = Math.max(1, parseInt(page, 10) || 1);
   const safeLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
   const skip = (safePage - 1) * safeLimit;
@@ -12,6 +12,8 @@ export async function getHistoryRecords({ page = 1, limit = 20, type = null } = 
   const where = {};
   if (type === 'url' || type === 'message') {
     where.inputType = type;
+  } else if (type === 'high_risk') {
+    where.riskLevel = 'high_risk';
   }
 
   const [total, checks] = await Promise.all([
@@ -19,7 +21,7 @@ export async function getHistoryRecords({ page = 1, limit = 20, type = null } = 
     prisma.threatCheck.findMany({
       where,
       orderBy: { createdAt: 'desc' },
-      include: { safetyRecommendations: true },
+      ...(includeRecommendations ? { include: { safetyRecommendations: true } } : {}),
       skip,
       take: safeLimit,
     }),

@@ -12,6 +12,7 @@ import analyzeRouter from './routes/analyze.js';
 import historyRouter from './routes/history.js';
 
 const app = express();
+app.disable('x-powered-by');
 
 // ── Security Headers (OWASP) ────────────────────────────────────────────────
 app.use(
@@ -23,7 +24,7 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
         imgSrc: ["'self'", 'data:', 'https:'],
-        connectSrc: ["'self'", CLIENT_URL],
+        connectSrc: ["'self'", CLIENT_URL, 'https://*.vercel.app'].filter(Boolean),
       },
     },
     crossOriginEmbedderPolicy: false,
@@ -39,6 +40,10 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, or same-origin)
       if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      // Dynamically allow Vercel production and preview deployment URLs (*.vercel.app)
+      if (/^https:\/\/[a-zA-Z0-9_.-]+\.vercel\.app$/.test(origin)) {
         return callback(null, true);
       }
       return callback(new Error(`CORS policy does not allow access from origin: ${origin}`));
@@ -62,6 +67,11 @@ app.use(requestLogger);
 app.use('/api/health', healthRouter);
 app.use('/api/analyze', analyzeRouter);
 app.use('/api/history', historyRouter);
+
+// Support serverless routing where /api prefix may be stripped by hosting rewrites
+app.use('/health', healthRouter);
+app.use('/analyze', analyzeRouter);
+app.use('/history', historyRouter);
 
 // ── 404 & Centralized Error Handler ─────────────────────────────────────────
 app.use(notFoundHandler);

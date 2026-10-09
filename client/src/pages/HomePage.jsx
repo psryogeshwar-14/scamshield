@@ -97,6 +97,7 @@ export default function HomePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return; // Prevent duplicate concurrent in-flight submissions
     const trimmed = input.trim();
 
     if (!trimmed) {
@@ -140,7 +141,7 @@ export default function HomePage() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
           </span>
-          <span className="font-mono tracking-wide uppercase">AI Cybersecurity Radar v1.0</span>
+          <span className="font-mono tracking-wide uppercase">Cybersecurity Threat Analyzer & Defense Assistant</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-5 font-heading">
@@ -151,8 +152,8 @@ export default function HomePage() {
         </h1>
 
         <p className="text-slate-400 text-sm sm:text-lg leading-relaxed max-w-2xl mx-auto">
-          Every day, students face deceptive phishing links, fake university notices, and urgent OTP traps.
-          ScamShield inspects threats in real time and delivers plain-language safety actions.
+          ScamShield identifies and analyzes cybersecurity threats across suspicious URLs and digital messages,
+          translates technical evidence into plain language, and provides actionable, step-by-step security recommendations.
         </p>
 
         {/* Live Telemetry Ticker Bar */}
@@ -330,7 +331,7 @@ export default function HomePage() {
             )}
 
             <p className="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
-              <span className="text-blue-400 font-bold">ℹ</span>
+              <span className="text-blue-400 font-bold" aria-hidden="true">ℹ</span>
               <span>
                 {activeTab === 'url'
                   ? 'Checks IP-based hosts, punycode lookalikes, URL shorteners, domain entropy, and Safe Browsing status.'
@@ -342,7 +343,7 @@ export default function HomePage() {
           {/* Quick Test Sample Cards */}
           <div className="pt-2">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2.5 font-mono">
-              Quick Test Scenarios:
+              One-Click Evaluation Scenarios (30s Quick Demo):
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {EXAMPLES.map((ex, idx) => (
@@ -396,9 +397,13 @@ export default function HomePage() {
       </div>
 
       {/* Educational Protection Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-12">
-        <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
+      <div className="mt-12">
+        <h2 className="text-xl sm:text-2xl font-black text-white text-center font-heading mb-6">
+          Multi-Layer Threat Evaluation Pipeline
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
@@ -439,6 +444,7 @@ export default function HomePage() {
           </p>
         </div>
       </div>
+    </div>
 
       {/* Safety Notice Footer */}
       <div className="mt-12 text-center text-xs text-slate-400 max-w-xl mx-auto space-y-1 font-mono">

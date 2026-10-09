@@ -39,7 +39,7 @@ export const api = {
   analyzePolymorphic: (inputType, userInput) => request('/api/analyze', { method: 'POST', body: JSON.stringify({ inputType, userInput }) }),
   getHistory: (page = 1, limit = 10, type = null) => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
-    if (type && type !== 'all' && type !== 'high_risk') {
+    if (type && type !== 'all') {
       params.append('type', type);
     }
     return request(`/api/history?${params.toString()}`);

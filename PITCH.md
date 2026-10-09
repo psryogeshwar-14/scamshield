@@ -17,7 +17,7 @@
 >
 > *We built ScamShield to be their personal cyber defense copilot. A student simply pastes the link or message. In milliseconds, our multi-layered engine analyzes 11 structural heuristic flags, queries Google Safe Browsing, and feeds structured signals to Gemini 2.5 Flash.*
 >
-> *Instead of an opaque score, ScamShield delivers a transparent 'Why This Result?' dossier that breaks down exact evidence alongside plain-language advice and an interactive step-by-step mitigation checklist. When external APIs fail, our deterministic offline engine ensures zero downtime. With 83 automated tests, 100% component accessibility, and strict privacy controls that never store sensitive credentials, ScamShield empowers students to verify before they trust."*
+> *Instead of an opaque score, ScamShield delivers a transparent 'Why This Result?' dossier that breaks down exact evidence alongside plain-language advice and an interactive step-by-step mitigation checklist. When external APIs fail, our deterministic offline engine ensures zero downtime. With 144 automated tests, 100% component accessibility, and strict privacy controls that never store sensitive credentials, ScamShield empowers students to verify before they trust."*
 
 ---
 
@@ -39,7 +39,7 @@
 >
 > *Finally, user safety and auditability. The frontend delivers an interactive, optimistic checklist syncing with an indexed SQLite database via Prisma ORM. Server logs redact sensitive inputs using cryptographic hashing.*
 >
-> *Our engineering rigor is proven: 83 automated tests across backend and frontend, 0 linter errors, sub-200ms production builds, and full WCAG 2.1 AA accessibility. ScamShield is production-grade cybersecurity software designed for real-world impact."*
+> *Our engineering rigor is proven: 144 automated tests across backend and frontend, 0 linter errors, sub-200ms production builds, and full WCAG 2.1 AA accessibility. ScamShield is production-grade cybersecurity software designed for real-world impact."*
 
 ---
 
@@ -67,4 +67,4 @@
 
 ### Q6: "What is your testing standard? Are your test numbers real?"
 **Honest Technical Answer**:
-> *"Every test is real and verifiable. Running `npm test` executes 83 passing tests (54 server tests covering unit heuristics, external fallbacks, and integration endpoints; 29 frontend tests covering components, routing, accessibility, and user flows). All external APIs are mocked using Vitest fixtures in tests so that testing never incurs cost, depends on network availability, or leaks live keys. Our statement test coverage is over 75% on both server and client."*
+> *"Every test is real and verifiable. Running `npm test` executes 144 passing tests (94 server tests covering unit heuristics, security penetration, database service, external fallbacks, and integration endpoints; 50 frontend tests covering components, routing, WCAG axe-core accessibility, and user flows). All external APIs are mocked using Vitest fixtures in tests so that testing never incurs cost, depends on network availability, or leaks live keys. Our statement test coverage is over 80% on both server and client."*

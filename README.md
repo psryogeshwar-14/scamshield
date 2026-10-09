@@ -1,58 +1,87 @@
-# 🛡️ ScamShield — AI Digital Safety Assistant
+# 🛡️ ScamShield — Intelligent Cybersecurity Threat Analyzer & Defense Assistant
 
-> **Intelligent, multi-layered threat radar protecting users and students against deceptive phishing URLs, credential-harvesting portals, and urgent social engineering scams.**  
+> **Hackathon Challenge**: *"Build an intelligent system that identifies or analyzes cybersecurity threats and provides actionable security recommendations."*  
+> **ScamShield's Solution**: An intelligent, multi-layered threat evaluation radar that identifies malicious URLs and social-engineering messages in real time, explains technical threat evidence in plain language, and provides interactive, step-by-step security recommendations.  
 > *Developed for PromptWars X Error Zero Hackathon • Track: AI-Powered Cybersecurity & Digital Safety*
 
 ---
 
-## 1. Problem Statement
+## ⚡ 30-Second Evaluator Demo Track
 
-Digital fraud has evolved beyond obvious spam into hyper-targeted social engineering:
-- **Lookalike Academic & Banking Portals**: Attackers deploy deceptive subdomains and low-reputation TLDs (e.g. `.xyz`, `.top`, `.tk`) mimicking university LMS portals, student aid dashboards, and payment processors.
-- **Urgent Credential Coercion**: Fake administrative alerts pressure students to share 6-digit OTPs, passwords, or UPI credentials under immediate threats of account closure or exam disqualification.
-- **Technical Literacy Gaps**: Victims frequently lack the deep cybersecurity training needed to dissect obfuscated URLs, recognize punycode homoglyphs, or verify SSL issuer reputations under pressure.
+Evaluate the complete threat identification and recommendation pipeline in under 30 seconds:
 
----
+```bash
+# 1. Start application locally
+npm run dev
+# Frontend: http://localhost:5173  |  Backend API: http://localhost:3001
+```
 
-## 2. Why This Matters
-
-Phishing remains the primary entry point for over 80% of reported cyberattacks. For students and everyday digital citizens:
-- A single compromised account can lead to identity theft, drained student accounts, or academic disciplinary action.
-- Generic antivirus tools often fail to catch zero-day phishing sites before they are cataloged by global blocklists.
-- Users need immediate, plain-language triage that does not merely assign an opaque score, but explains **why** a message is dangerous and provides an **interactive step-by-step mitigation plan**.
-
----
-
-## 3. Solution Overview
-
-**ScamShield** bridges deterministic heuristic analysis, external reputation feeds, and generative AI reasoning:
-1. **Deterministic Heuristics Engine**: Evaluates 11 structural signals (IP hosts, brand spoofing, suspicious TLDs, excessive subdomains, shortener domains, unencrypted HTTP) in under 2ms.
-2. **Reputation Threat Feed**: Queries the Google Safe Browsing Lookup API v4 for confirmed malicious listings, degrading gracefully to `"unavailable"` when unconfigured or offline.
-3. **Gemini 2.5 Flash Reasoning**: Synthesizes a structured threat classification, calculates confidence, translates technical findings into plain language, and generates an interactive mitigation checklist.
-4. **Resilient Local Fallback**: When external AI services or network calls are unavailable, ScamShield executes deterministic offline pattern matching for instant, dependable protection.
+1. **Open** `http://localhost:5173` in your browser.
+2. **Click** any preset under **"One-Click Evaluation Scenarios"**:
+   - `PayPal Phishing Domain` (URL Threat)
+   - `Urgent Bank Block Threat` (Message / OTP Threat)
+3. **Click** `"Launch Threat Analysis"`.
+4. **Observe the 3 Core Capabilities in Real Time**:
+   - 🎯 **Cybersecurity Threat Identified**: Visual Risk Severity (`Critical Hazard`), Classification (`Phishing / Impersonation`), and Calibrated Risk Score (`85/100`).
+   - 💡 **Evidence Explained in Plain Language**: Transparent 4-pillar breakdown (`Deterministic Heuristics`, `Google Safe Browsing v4 Feed`, `Gemini AI Intent Reasoning`, and `Confidence Limitations`).
+   - 🛡️ **Actionable Security Recommendations**: High-priority **Immediate Directive** banner + **Interactive Safety Checklist** with toggleable checkboxes and persistent progress tracking.
 
 ---
 
-## 4. Feature List
+## 1. Problem Statement Alignment
 
-- **🔍 Dual-Mode Input Scanner**: Analyze suspect URLs or copy-pasted messages (SMS, WhatsApp, Telegram, email).
-- **⚙️ 11-Point Structural Heuristics**: Immediate deterministic detection of brand spoofing, unencrypted HTTP, suspicious TLDs, IP hosts, and URL shorteners.
-- **🌐 Google Safe Browsing v4 Integration**: Real-time reputation feed check with resilient fallback handling.
-- **🤖 Gemini AI Structured Reasoning**: Strict schema-validated threat assessments, plain-language summaries, and mitigation steps.
-- **🧭 "Why This Result?" Multi-Pillar Breakdown**: Transparently details findings across deterministic checks, external feeds, AI intent reasoning, and confidence limitations.
-- **✅ Interactive Safety Checklist**: Actionable steps to neutralize risks with persistent completion tracking.
-- **📊 Threat Dossier & History Log**: Searchable, paginated audit records with client-side keyword filtering and deletion controls.
-- **🎓 Student Threat Playbook**: Interactive simulator and defense playbooks covering Phishing, OTP Fraud, UPI Scams, Fake Jobs, and Identity Theft.
-- **🔒 Privacy-Preserving Architecture**: Passwords and sensitive inputs are never logged; user URLs are never fetched or executed on the server.
+ScamShield addresses the exact challenge prompt:  
+**"Build an intelligent system that identifies or analyzes cybersecurity threats and provides actionable security recommendations."**
+
+Today's digital citizens, particularly students and young professionals, face sophisticated social engineering that exposes three critical industry gaps:
+
+1. **The Detection Gap**: Traditional antiviruses and DNS filters rely on retroactive cataloging. They miss newly minted zero-day phishing domains and non-URL messaging fraud (SMS urgency extortion, OTP harvesting, advance-fee Telegram traps).
+2. **The Communication Gap**: Existing security tools output cryptic jargon (*"Shannon entropy 4.2"*, *"Punycode xn-- spoof"* or raw HTTP codes). Users cannot understand the nature of the hazard.
+3. **The Actionability Gap**: Most security products stop at a passive warning badge (*"Malicious - Proceed at your own risk"*), leaving panicked victims with no guidance on how to secure their accounts.
 
 ---
 
-## 5. Screenshots & Visual Walkthrough
+## 2. Solution Statement
+
+**ScamShield** bridges deterministic structural heuristics, live reputation intelligence, and generative AI reasoning into a coherent, resilient cyber defense assistant:
+
+1. **Multi-Vector Threat Analysis**:
+   - **URL Analysis Pipeline**: Analyzes 11 structural features (<2ms) including IP-based hosts, punycode lookalikes, URL shorteners, excessive subdomains, suspicious TLDs, and protocol downgrades.
+   - **Reputation Intelligence**: Cross-references the Google Safe Browsing Lookup v4 API, gracefully reporting `"unavailable"` when unconfigured or offline rather than assuming safety.
+   - **Message Analysis Pipeline**: Evaluates urgency manipulation, OTP theft patterns, reverse QR code / UPI traps, advance-fee employment fraud, and executable sideloads.
+2. **Plain-Language Evidence Explanation**:
+   - Translates raw metrics into everyday concepts through a dedicated **Plain-Language Explanation** card and a transparent **"Why This Result?"** 4-pillar evidence breakdown.
+3. **Actionable Security Recommendations**:
+   - Delivers a single, unequivocal **Recommended Immediate Directive** to prevent immediate harm.
+   - Generates an **Interactive Defensive Checklist** with checkable steps saved to SQLite via Prisma for continuous threat remediation.
+   - Provides a one-click **Shareable Advisory** for campus group alerts and direct escalation to the **National Cyber Crime Helpline (1930)**.
+4. **Guaranteed Offline Resilience**:
+   - If external APIs (Gemini or Safe Browsing) are offline, rate-limited, or unconfigured, ScamShield’s deterministic fallback engine activates automatically, guaranteeing zero downtime or blind spots.
+
+---
+
+## 3. Core Feature Matrix
+
+| Capability Category | Feature | Problem Statement Function |
+| :--- | :--- | :--- |
+| **Threat Identification** | 11-Point Structural Heuristics | Real-time lexical analysis of IP hosts, brand spoofing, TLD abuse, and URL shorteners. |
+| **Threat Intelligence** | Google Safe Browsing v4 | Live reputation feed cross-referencing known malware, deceptive sites, and exploit kits. |
+| **Intelligent Reasoning** | Gemini 2.5 Flash Structured Analysis | Strict JSON schema extraction of threat category, confidence score, and observable indicators. |
+| **Evidence Explanation** | Plain-Language Summary & Why Card | Demystifies technical findings across heuristics, reputation status, and intent analysis. |
+| **Actionable Recommendations** | Immediate Directive Callout | High-contrast emergency instruction preventing immediate credential or financial surrender. |
+| **Actionable Recommendations** | Interactive Safety Checklist | Step-by-step mitigation plan with checkable actions and persistent database progress tracking. |
+| **Collaborative Defense** | One-Click Share Advisory | Preformatted warning text ready to alert peer circles on WhatsApp, Telegram, or Slack. |
+| **Proactive Training** | Student Threat Simulator | Interactive "Spot The Scam" training module with real-world scenarios and defense playbooks. |
+| **Privacy & Hardening** | Zero-Execution Privacy Shield | User URLs are never fetched or executed on the server; zero credential logging. |
+
+---
+
+## 4. Screenshots & Visual Walkthrough
 
 Real screenshots captured directly from ScamShield:
 
 | Home Security Radar | Threat Evaluation Verdict |
-| :---: | :---: |
+| :--- :---: | :---: |
 | ![Home Scanner](docs/screenshots/01_home_analyzer.png) | ![Verdict Dossier](docs/screenshots/02_url_analysis_result.png) |
 | *Input scanner with sample chips & mode tabs* | *Radial gauge, risk badges, and plain-language explanation* |
 
@@ -68,10 +97,21 @@ Real screenshots captured directly from ScamShield:
 
 ---
 
-## 6. Live Demo
+## 5. Deployment Guide & Live Links
 
-- **Live Application**: *[Deployment Link Placeholder — https://scamshield.example.com]*
-- **Video Walkthrough**: *[Demo Video Link Placeholder — 90-Second Walkthrough]*
+- **Vercel Account**: [https://vercel.com/yogeshwar1](https://vercel.com/yogeshwar1)
+- **Zero-Bug Vercel Configuration**: Pre-configured full-stack deployment via root [`vercel.json`](file:///Users/psryogeshwar/Documents/Documents/Project/scamshield/vercel.json) and serverless entrypoint [`api/index.js`](file:///Users/psryogeshwar/Documents/Documents/Project/scamshield/api/index.js).
+- **Fast Deploy Steps**:
+  1. Push repository to GitHub.
+  2. Visit [Vercel New Project](https://vercel.com/new) under team `yogeshwar1`.
+  3. Import the repository (Vercel automatically detects `vercel.json`).
+  4. Configure environment variables (`GEMINI_API_KEY`, optional `SAFEBROWSING_API_KEY`, `NODE_ENV=production`).
+  5. Click **Deploy**. The Vite client and Express serverless functions deploy concurrently.
+- **CLI Deployment Option**:
+  ```bash
+  npx vercel login
+  npx vercel --prod
+  ```
 
 ---
 
@@ -152,56 +192,47 @@ sequenceDiagram
 
 ---
 
-## 9. Threat-Analysis Pipeline
+## 9. 4-Stage Threat-Analysis Pipeline
 
 ScamShield evaluates incoming targets through four sequential stages:
 
 ```
-[Target Input]
+[Target Input: URL / Message]
       │
       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ 1. Input Normalization & Sanity Validation                  │
-│    • Validate scheme (http/https), reject null bytes        │
-│    • URL max length: 2,048 chars | Message: 5,000 chars     │
-│    • Server NEVER fetches or redirects to the remote URL    │
+│ STAGE 1: URL Heuristics (Local 11-Point Structural Engine)  │
+│ • Local execution (<2ms); server NEVER fetches remote URLs  │
+│ • Evaluates IP hosts, shorteners, suspicious TLDs, punycode │
+│ • Brand impersonation, subdomain depth, protocol downgrade  │
 └─────────────────────────────────────────────────────────────┘
       │
       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ 2. Deterministic Structural Heuristic Engine (11 Checks)    │
-│    • Missing HTTPS protocol                                 │
-│    • IP-address hosts (e.g. 192.168.1.1)                    │
-│    • URL shortener redirection services                     │
-│    • High-abuse TLDs (.xyz, .top, .tk, .cc, etc.)           │
-│    • Excessive subdomains (≥ 3 depth)                       │
-│    • Target brand keyword impersonation (avoiding FP)       │
-│    • Suspicious path/query keywords                         │
-│    • Excessive hyphens (≥ 2 in host)                        │
-│    • Punycode / IDN homoglyphs (xn--)                       │
-│    • Non-standard port exposure (e.g. :8080, :8443)         │
-│    • High-entropy domain tokens                             │
+│ STAGE 2: Google Safe Browsing Reputation Check (Lookup v4)  │
+│ • Official endpoint: /v4/threatMatches:find                 │
+│ • 5,000ms AbortController timeout guard                     │
+│ • Strict 3-state resolution: 'threat' | 'clean' | 'unavail' │
+│ • Never claims 'safe' when service is unavailable           │
 └─────────────────────────────────────────────────────────────┘
       │
       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ 3. External Reputation Feed (Google Safe Browsing v4)       │
-│    • Query malware, social engineering, and unwanted lists  │
-│    • 5-second AbortController timeout guard                 │
-│    • Return 'unavailable' if unconfigured; never false safe │
+│ STAGE 3: Gemini Explanation and Classification              │
+│ • Official @google/genai SDK with gemini-2.5-flash          │
+│ • Strict JSON schema output (SCAM_SHIELD_RESPONSE_SCHEMA)   │
+│ • Factual prompt grounding (temperature: 0.1, no hallucination)│
+│ • 10,000ms timeout guard + deterministic offline fallback   │
 └─────────────────────────────────────────────────────────────┘
       │
       ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ 4. Cognitive Intent Reasoning (Gemini AI + Fallback)        │
-│    • Schema-validated structured JSON output                │
-│    • 10-second AbortController timeout                      │
-│    • Evaluates urgency coercion, credential harvesting traps │
-│    • Deterministic keyword-tree fallback if offline/quota   │
+│ STAGE 4: Validated Safety Recommendations                   │
+│ • Deterministic risk reconciliation (prevents false safe)   │
+│ • High-priority Recommended Immediate Directive             │
+│ • Interactive Safety Checklist (persisted via Prisma SQLite)│
+│ • Why This Result? 4-Pillar Breakdown & Shareable Advisory  │
 └─────────────────────────────────────────────────────────────┘
-      │
-      ▼
-[Normalized Verdict + Why Breakdown + Safety Action Steps]
 ```
 
 ---

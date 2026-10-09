@@ -1,4 +1,5 @@
 import { analyzeUrlTarget, analyzeMessageTarget } from '../services/analysisService.js';
+import { createError } from '../middleware/errorHandler.js';
 
 /**
  * Controller for POST /api/analyze/url
@@ -55,14 +56,7 @@ export async function analyzeUnified(req, res, next) {
       });
     }
 
-    res.status(400).json({
-      success: false,
-      error: {
-        message: 'Invalid inputType. Must be "url" or "message".',
-        code: 'INVALID_INPUT_TYPE',
-        requestId: req.id,
-      },
-    });
+    return next(createError('Invalid inputType. Must be "url" or "message".', 400, 'INVALID_INPUT_TYPE'));
   } catch (err) {
     next(err);
   }

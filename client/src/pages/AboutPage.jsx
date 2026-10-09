@@ -253,7 +253,7 @@ export default function AboutPage() {
         </div>
 
         {/* Category Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6" role="tablist">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6" role="tablist" aria-label="Threat topics">
           {THREAT_TOPICS.map((topic) => (
             <button
               key={topic.id}
@@ -338,6 +338,7 @@ export default function AboutPage() {
           href="https://cybercrime.gov.in"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="cybercrime.gov.in — National Cyber Crime Reporting Portal (opens in a new tab)"
           className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white border border-slate-700 transition-colors whitespace-nowrap"
         >
           cybercrime.gov.in →

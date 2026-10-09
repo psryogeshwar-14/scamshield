@@ -99,15 +99,23 @@ export default function ResultPage() {
     if (data?.id && !stepId.startsWith('step-') && !stepId.startsWith('fallback-')) {
       try {
         await api.updateRecommendation(data.id, stepId, nextStatus);
-      } catch (err) {
-        console.warn('Could not sync step status to database:', err);
+        addToast(
+          nextStatus ? 'Safety action marked as completed!' : 'Safety action unchecked',
+          nextStatus ? 'success' : 'info'
+        );
+      } catch {
+        // Revert optimistic state on network/storage failure
+        setSteps((prev) =>
+          prev.map((s) => (s.id === stepId ? { ...s, completed: currentStatus } : s))
+        );
+        addToast('Could not save safety action status. Please retry.', 'error');
       }
+    } else {
+      addToast(
+        nextStatus ? 'Safety action marked as completed!' : 'Safety action unchecked',
+        nextStatus ? 'success' : 'info'
+      );
     }
-
-    addToast(
-      nextStatus ? 'Safety action marked as completed!' : 'Safety action unchecked',
-      nextStatus ? 'success' : 'info'
-    );
   };
 
   const handleCopyInput = () => {
@@ -301,7 +309,7 @@ export default function ResultPage() {
           {/* Circular Threat Risk Gauge */}
           <div className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex items-center gap-4">
             <div className="relative w-24 h-24 shrink-0 flex items-center justify-center">
-              <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100">
+              <svg className="w-24 h-24 transform -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
                 <circle
                   cx="50"
                   cy="50"
@@ -590,7 +598,7 @@ export default function ResultPage() {
           </div>
 
           {/* Steps List */}
-          <div className="space-y-3" role="list">
+          <div className="space-y-3" role="group" aria-label="Interactive safety checklist">
             {steps.map((step, idx) => (
               <div
                 key={step.id}

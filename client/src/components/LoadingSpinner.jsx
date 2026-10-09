@@ -56,8 +56,6 @@ export default function LoadingSpinner({ message = 'Analyzing threat indicatorsâ
           <span>Cross-referencing Safe Browsing & AI Heuristics</span>
         </div>
       )}
-
-      <span className="sr-only">{message}</span>
     </div>
   );
 }

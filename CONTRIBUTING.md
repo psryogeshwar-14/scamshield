@@ -53,16 +53,22 @@ npm run dev
 Before submitting a pull request, ensure all verification steps pass locally:
 
 ```bash
-# 1. Run all 83 automated tests
+# 1. Run all 144 automated tests (94 server, 50 client)
 npm test
 
-# 2. Check code coverage
+# 2. Check code coverage (>81% global line coverage)
 npm run test:coverage
 
-# 3. Run static analysis & linting (oxlint)
+# 3. Run static analysis & linting (oxlint on 52 files)
 npm run lint
 
-# 4. Verify production builds
+# 4. Run dependency security audit
+npm run audit
+
+# 5. Verify database migration & demo seeding
+npm run db:migrate && npm run db:seed
+
+# 6. Verify production builds
 npm run build
 ```
 

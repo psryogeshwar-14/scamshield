@@ -67,15 +67,23 @@ export default function SafetyActionsPage() {
     if (id && !stepId.startsWith('step-')) {
       try {
         await api.updateRecommendation(id, stepId, next);
-      } catch (err) {
-        console.warn('Could not sync step to server:', err);
+        addToast(
+          next ? 'Protective action completed!' : 'Action marked incomplete',
+          next ? 'success' : 'info'
+        );
+      } catch {
+        // Revert optimistic state on failure
+        setSteps((prev) =>
+          prev.map((s) => (s.id === stepId ? { ...s, completed: current } : s))
+        );
+        addToast('Could not save protective action status. Please retry.', 'error');
       }
+    } else {
+      addToast(
+        next ? 'Protective action completed!' : 'Action marked incomplete',
+        next ? 'success' : 'info'
+      );
     }
-
-    addToast(
-      next ? 'Protective action completed!' : 'Action marked incomplete',
-      next ? 'success' : 'info'
-    );
   };
 
   if (loading) {
@@ -143,7 +151,7 @@ export default function SafetyActionsPage() {
       </div>
 
       {/* Steps List */}
-      <div className="space-y-3 mb-8" role="list">
+      <div className="space-y-3 mb-8" role="group" aria-label="Interactive defensive measures checklist">
         {steps.map((step, idx) => (
           <div
             key={step.id}

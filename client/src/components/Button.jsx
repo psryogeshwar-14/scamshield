@@ -60,11 +60,15 @@ export default function Button({
     },
   };
 
+  const focusClasses = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950';
+  const combinedClass = rest.className ? `${focusClasses} ${rest.className}` : focusClasses;
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
+      className={combinedClass}
       style={{ ...base, ...sizes[size], ...variants[variant], ...extraStyle }}
       {...rest}
     >

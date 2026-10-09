@@ -9,11 +9,14 @@ Fixes #(issue)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 - [ ] Security hardening
+- [ ] Performance optimization
+- [ ] Accessibility enhancement
 
 ## Verification Checklist
-- [ ] `npm test` passes completely (both server and client tests pass)
-- [ ] `npm run lint` passes with 0 errors and 0 warnings
-- [ ] `npm run build` succeeds cleanly
+- [ ] `npm test` passes completely (144/144 tests passing across server and client)
+- [ ] `npm run lint` passes with 0 errors and 0 warnings (`oxlint`)
+- [ ] `npm run build` succeeds cleanly in production mode
+- [ ] `npm run audit` reports 0 vulnerabilities
 - [ ] I have added automated tests covering any new functionality
-- [ ] No real external API keys or credentials are included in code or commits
-- [ ] Zero server-side execution of untrusted user URLs
+- [ ] No real external API keys, tokens, or credentials are included in code or commits
+- [ ] Zero server-side fetching/execution of untrusted user URLs maintained

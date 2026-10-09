@@ -77,6 +77,18 @@ export default function HistoryPage() {
     }
   };
 
+  // Close modal when user presses Escape
+  useEffect(() => {
+    if (!deleteTarget) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setDeleteTarget(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [deleteTarget]);
+
   const handleExportJSON = () => {
     if (!history.length) {
       addToast('No records to export', 'info');
@@ -176,6 +188,7 @@ export default function HistoryPage() {
         <div className="relative flex-1 max-w-md">
           <input
             type="text"
+            aria-label="Search threat scan history"
             placeholder="Search history by URL, keyword, or threat type..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -333,13 +346,22 @@ export default function HistoryPage() {
 
       {/* Delete Confirmation Modal */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div
+          className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="delete-dialog-title"
+          aria-describedby="delete-dialog-desc"
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setDeleteTarget(null);
+          }}
+        >
           <div className="max-w-md w-full p-6 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl">
             <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center text-xl mb-4">
               🗑️
             </div>
-            <h3 className="text-lg font-bold text-white font-heading">Delete Security Dossier?</h3>
-            <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+            <h3 id="delete-dialog-title" className="text-lg font-bold text-white font-heading">Delete Security Dossier?</h3>
+            <p id="delete-dialog-desc" className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
               Are you sure you want to delete the record for:
             </p>
             <p className="text-xs font-mono text-slate-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800/80 mt-2 truncate">

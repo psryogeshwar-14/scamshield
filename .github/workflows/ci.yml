@@ -15,23 +15,36 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 22.x]
 
+    env:
+      CI: true
+      NODE_ENV: test
+      PORT: 3001
+      DATABASE_URL: "file:./prisma/dev.db"
+      CLIENT_URL: "http://localhost:5173"
+      GEMINI_API_KEY: "dummy_test_gemini_key_for_ci_pipeline"
+      SAFEBROWSING_API_KEY: "dummy_test_safebrowsing_key_for_ci"
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
-      - name: Install dependencies & generate Prisma client
+      - name: Install dependencies & setup workspace
         run: npm run setup
+
+      - name: Apply database migrations & demo seed
+        run: |
+          npm run db:migrate
+          npm run db:seed
 
       - name: Static Analysis & Linting (oxlint)
         run: npm run lint
 
-      - name: Execute Automated Test Suites (83 Tests)
+      - name: Execute Automated Test Suites (144 Tests)
         run: npm test
 
       - name: Measure Code Coverage
@@ -40,5 +53,5 @@ jobs:
       - name: Build Production Client & Server
         run: npm run build
 
-      - name: Dependency Vulnerability Audit
-        run: npm audit --audit-level=high
+      - name: Dependency Security Audit
+        run: npm run audit

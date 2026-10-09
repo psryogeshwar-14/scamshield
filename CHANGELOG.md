@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-10-09
+
+### Added
+- **Expanded Test Suite (144 Automated Tests)**: Added 61 new automated tests across server and client workspaces, expanding coverage from 83 to 144 passing tests (94 server, 50 client):
+  - Comprehensive security penetration suite (`server/tests/security.test.js`) covering oversized payloads, malformed URL fuzzing, XSS/HTML injection, repeated request flooding, and API error leakage prevention.
+  - Prisma database operations suite (`server/tests/db.test.js`) verifying record persistence, pagination limits, checklist toggle synchronization, and cascade deletions.
+  - Automated WCAG accessibility suite (`client/src/tests/a11y.test.jsx`) powered by `axe-core` verifying 0 violations across Home, Results, History, and interactive state components.
+- **SQLite Composite B-Tree Indexes**: Added composite performance indexes on `ThreatCheck(createdAt, riskLevel, inputType)` in `prisma/schema.prisma` for sub-millisecond history queries and pagination.
+- **30-Second Evaluator Quick-Start Track**: Added 1-click test fixture pills (`Phishing URL`, `Urgent SMS Phish`, `Clean Domain`) in `HomePage.jsx` and 30-second verification instructions in `README.md`.
+- **Comprehensive Documentation Suite**:
+  - `ARCHITECTURE.md`: System architecture specification with Mermaid diagrams detailing zero-server-fetch trust boundaries, the 4-stage pipeline, and database schema.
+  - `GOOGLE_SERVICES_REPORT.md`: Audit of Google Safe Browsing Lookup v4 and Gemini 2.5 Flash (`@google/genai`), verifying structured outputs, fail-safe degradation, and server-side secret isolation.
+  - `PROBLEM_ALIGNMENT_REPORT.md`: Alignment analysis against the core problem statement, eliminating ambiguity across UI, README, pitch, and demo flows.
+  - `ACCESSIBILITY_REPORT.md`: 13-dimension WCAG 2.1/2.2 AA audit with automated axe-core verification.
+
+### Changed
+- Refined reputation badge terminology to explicitly distinguish "No Known Threat Match" from "Safe" to prevent false senses of security.
+- Synchronized `PITCH.md`, `DEMO_SCRIPT.md`, and `README.md` with 144 verified tests and WCAG AA benchmarks.
+
+---
+
 ## [1.0.0] - 2026-10-09
 
 ### Added

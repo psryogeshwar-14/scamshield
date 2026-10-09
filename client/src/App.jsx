@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import ResultPage from './pages/ResultPage';
-import SafetyActionsPage from './pages/SafetyActionsPage';
-import HistoryPage from './pages/HistoryPage';
-import AboutPage from './pages/AboutPage';
-import NotFoundPage from './pages/NotFoundPage';
+import LoadingSpinner from './components/LoadingSpinner';
 import { ToastProvider } from './context/ToastProvider';
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ResultPage = lazy(() => import('./pages/ResultPage'));
+const SafetyActionsPage = lazy(() => import('./pages/SafetyActionsPage'));
+const HistoryPage = lazy(() => import('./pages/HistoryPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 export default function App() {
   return (
@@ -16,15 +18,23 @@ export default function App() {
         <div className="min-h-screen bg-[#060913] text-slate-100 flex flex-col font-sans selection:bg-blue-500/30 selection:text-blue-200">
           <Navbar />
           <main className="flex-1 relative">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/result/:id" element={<ResultPage />} />
-              <Route path="/safety/:id" element={<SafetyActionsPage />} />
-              <Route path="/history" element={<HistoryPage />} />
-              <Route path="/tips" element={<AboutPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+            <Suspense
+              fallback={
+                <div className="py-24 flex items-center justify-center">
+                  <LoadingSpinner message="Loading ScamShield module..." />
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/result/:id" element={<ResultPage />} />
+                <Route path="/safety/:id" element={<SafetyActionsPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/tips" element={<AboutPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
           </main>
           <footer className="py-8 border-t border-slate-900/80 bg-slate-950/70 backdrop-blur-md text-xs text-slate-500 mt-auto relative z-10">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
