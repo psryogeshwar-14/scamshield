@@ -6,6 +6,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorAlert from '../components/ErrorAlert';
 import { useToast } from '../hooks/useToast';
 import api from '../api/client';
+import { extractSafetySteps } from '../utils/safetyHelpers';
 
 export default function SafetyActionsPage() {
   const { id } = useParams();
@@ -26,25 +27,7 @@ export default function SafetyActionsPage() {
         const item = json.data;
         if (!isMounted) return;
         setData(item);
-
-        if (item.safetyRecommendations && item.safetyRecommendations.length > 0) {
-          setSteps(
-            item.safetyRecommendations.map((r) => ({
-              id: r.id,
-              action: r.action,
-              completed: Boolean(r.completed),
-            }))
-          );
-        } else if (item.safetyStepsJson) {
-          const parsed = JSON.parse(item.safetyStepsJson);
-          setSteps(
-            parsed.map((action, idx) => ({
-              id: `step-${idx}`,
-              action,
-              completed: false,
-            }))
-          );
-        }
+        setSteps(extractSafetySteps(item));
       } catch (err) {
         if (isMounted) setError(err.message);
       } finally {

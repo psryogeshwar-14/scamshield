@@ -1,258 +1,216 @@
-# 🛡️ ScamShield — Code Quality & Engineering Audit Report
+# ScamShield — Code Quality Refactoring Report
 
-> **Comprehensive Code Quality Audit across Frontend and Backend Architecture**  
-> *Date of Audit: October 9, 2026 • Auditor: Lead Software & Security Engineer*  
+**Audit Date**: October 2026  
+**Status**: Completed & Verified  
+**Linter**: Oxlint — 0 Errors, 0 Warnings across 68 files  
+**Automated Tests**: 182 / 182 Passing (126 Server, 56 Client) — 100% Pass Rate  
+**Server Code Coverage**: 85.87% Lines, 88.81% Functions, 84.81% Statements  
+**Client Code Coverage**: 81.60% Lines, 67.91% Functions, 79.28% Statements  
 
 ---
 
 ## 1. Executive Summary
 
-A comprehensive code quality audit was performed across every source file in ScamShield. The audit targeted 11 specific quality dimensions:
-1. Duplicated logic
-2. Large or complex functions
-3. Unused files and dependencies
-4. Inconsistent naming
-5. Weak error handling
-6. Hardcoded values
-7. Console logs
-8. Unreachable code
-9. Missing validation
-10. Incorrect HTTP status codes
-11. Database inefficiencies
+This refactoring strictly targeted **Code Quality** improvements without introducing feature creep, modifying existing UI aesthetics, or degrading Security, Accessibility, Performance, or Problem Alignment. 
 
-All findings were cataloged, categorized by severity, surgically refactored where useful without altering working behavior, and re-verified against the full verification suite (linting, tests, build).
+Every identified code quality defect—including large multifunction scripts, coupled business and persistence logic, duplicated regex checks, raw Prisma queries in services, and unstandardized error structures—has been resolved through clean architectural separation, pure domain engines, and standardized contracts.
 
 ---
 
-## 2. Itemized Code Quality Audit Findings
+## 2. Architectural Separation of Responsibilities
 
-### Dimension 1: Unused Files and Dead Code
-* **Finding CQ-01**: Dead Components with Invalid Inline Styling (`Card.jsx` & `Input.jsx`)
-  * **File & Line**: `client/src/components/Card.jsx:1-33`, `client/src/components/Input.jsx:1-66`
-  * **Severity**: **Medium**
-  * **Why it matters**: `Card.jsx` and `Input.jsx` were boilerplate scaffolding components never imported by any page in the application. In addition, `Card.jsx` contained an invalid `:hover` pseudo-selector within a React inline style object (`{ ':hover': ... }`), which is invalid syntax in React and had no effect.
-  * **Fix Applied**: Removed both dead files (`client/src/components/Card.jsx` and `client/src/components/Input.jsx`). Verified that zero imports or tests were affected.
-  * **Verification Result**: `oxlint` ran across remaining 25 client files with 0 errors/warnings. Bundle size clean.
+The ScamShield codebase has been structured into clean, single-responsibility layers:
 
----
-
-### Dimension 2: Weak Error Handling & Console Warnings
-* **Finding CQ-02**: Unhandled Optimistic Mutation Rollbacks & Raw Console Warnings
-  * **File & Line**: `client/src/pages/ResultPage.jsx:98-112` and `client/src/pages/SafetyActionsPage.jsx:67-79`
-  * **Severity**: **High**
-  * **Why it matters**: When users toggled safety checklist recommendations, the state was updated optimistically. If the backend persistence call (`api.updateRecommendation`) failed due to network disruption, the error was logged via `console.warn` while the UI continued showing the step as checked and displayed a success toast ("Safety action marked as completed!").
-  * **Fix Applied**: 
-    1. Replaced `console.warn` with proper rollback logic that restores previous completion status upon API rejection.
-    2. Added an error notification toast (`addToast('Could not save safety action status. Please retry.', 'error')`) on failure.
-    3. Used ES2019 optional catch binding (`catch { ... }`) to eliminate unused error parameter warnings.
-  * **Verification Result**: Verified in `ResultPage.jsx` and `SafetyActionsPage.jsx`; passes linting with 0 warnings; automated tests pass.
-
----
-
-### Dimension 3: Console Logs in Client Application
-* **Finding CQ-03**: Fallback `console.log` in Toast Hook
-  * **File & Line**: `client/src/hooks/useToast.js:8-12`
-  * **Severity**: **Low**
-  * **Why it matters**: `useToast.js` had a fallback `console.log('[Toast]', msg)` if invoked outside the provider hierarchy, polluting stdout in test or edge environments.
-  * **Fix Applied**: Replaced the `console.log` with a clean no-op (`addToast: () => {}`).
-  * **Verification Result**: Zero console output in test runs; clean linter pass.
-
----
-
-### Dimension 4: Inconsistent Naming & Missing Validation across Stack
-* **Finding CQ-04**: History Filter Disconnect Between UI and Server Validator
-  * **File & Line**: `server/src/validators/historyValidators.js:17-21`, `server/src/services/historyService.js:12-16`, and `client/src/api/client.js:40-46`
-  * **Severity**: **High**
-  * **Why it matters**: 
-    - The frontend `HistoryPage.jsx` provides filter tabs: `All`, `Links`, `Messages`, and `High Risk`.
-    - However, `server/src/validators/historyValidators.js` only accepted `['url', 'message']` in `query('type')`, meaning querying `type=high_risk` resulted in a 400 Validation Error.
-    - `client.js` previously worked around this by omitting `high_risk` from query params, forcing `HistoryPage.jsx` to filter in memory on the current 10-record page rather than across the whole database.
-  * **Fix Applied**:
-    1. Updated `historyValidators.js` to validate `query('type').isIn(['url', 'message', 'high_risk', 'all'])`.
-    2. Updated `historyService.js` to filter by `where.riskLevel = 'high_risk'` when `type === 'high_risk'`.
-    3. Updated `client/src/api/client.js` to forward `type` whenever specified (except `'all'`).
-  * **Verification Result**: Full stack consistency restored; database-level filtering across all pages for High Risk records works seamlessly.
-
----
-
-### Dimension 5: Database Inefficiencies
-* **Finding CQ-05**: Missing Indexes on Frequently Queried and Sorted Columns
-  * **File & Line**: `server/prisma/schema.prisma:14-42`
-  * **Severity**: **Medium**
-  * **Why it matters**:
-    - `ThreatCheck` is ordered by `createdAt DESC` on every history request and filtered by `inputType` and `riskLevel`. In SQLite/PostgreSQL, absence of indexes causes full-table scans and file-sort operations as history grows.
-    - `SafetyRecommendation` has foreign key `threatCheckId` joined on cascade deletes and ID lookups without an explicit index.
-  * **Fix Applied**:
-    1. Added `@@index([createdAt])`, `@@index([inputType])`, and `@@index([riskLevel])` on model `ThreatCheck`.
-    2. Added `@@index([threatCheckId])` on model `SafetyRecommendation`.
-    3. Created and deployed Prisma migration `20261009112500_add_performance_indexes`.
-    4. Regenerated Prisma Client v5.22.0.
-  * **Verification Result**: Applied migration with 0 errors; verified with SQLite query execution.
-
----
-
-### Dimension 6: Hardcoded Values & Broken Asset Reference
-* **Finding CQ-06**: HTML Favicon Link Pointing to Non-Existent Asset
-  * **File & Line**: `client/index.html:5`
-  * **Severity**: **Low**
-  * **Why it matters**: `client/index.html` contained `<link rel="icon" type="image/svg+xml" href="/shield.svg" />`. The file in `client/public/` is actually `favicon.svg`. When opening the site in a browser, the browser sent a request for `/shield.svg`, generating a 404 response.
-  * **Fix Applied**: Changed `href="/shield.svg"` to `href="/favicon.svg"`.
-  * **Verification Result**: Favicon loads directly from `public/favicon.svg` with HTTP 200.
-
----
-
-### Dimension 7: Large or Complex Functions
-* **Finding CQ-07**: Heuristic Evaluation Complexity Analysis
-  * **File & Line**: `server/src/services/urlAnalyzer.js:251-435`
-  * **Severity**: **Info / Documented**
-  * **Why it matters**: `runHeuristicChecks` evaluates 11 sequential threat rules (184 lines). While extensive, the logic is linear, purely deterministic, has no cyclomatic nested loops, executes in < 2ms, and is backed by 17 unit tests. Splitting it into micro-files would increase import overhead without engineering benefit.
-  * **Fix Applied**: Retained clear modular helper functions (`isIpAddress`, `extractRootDomain`, `safeParseUrl`, `normalizeUrl`) with explicit inline comments.
-
----
-
-### Dimension 8: HTTP Status Code and Error Uniformity
-* **Finding CQ-08**: Verification of All API Status Codes
-  * **File & Line**: `server/src/controllers/*`, `server/src/middleware/errorHandler.js`
-  * **Severity**: **Verified Clean**
-  * **Audit Check**:
-    - `200 OK`: Successful analysis, history fetch, update, and health check.
-    - `400 Bad Request`: Schema validation errors, missing IDs, malformed inputs.
-    - `404 Not Found`: Non-existent history record, missing routes (`notFoundHandler`).
-    - `413 Payload Too Large`: Enforced by 50KB Express body limit.
-    - `429 Too Many Requests`: Enforced by sliding-window rate limiters.
-    - `500 Internal Error`: Masked cleanly by `globalErrorHandler` without stack traces.
-  * **Verification Result**: All status codes adhere strictly to REST conventions.
-
----
-
-## 3. Verification Suite Execution Results
-
-### 1. Static Analysis & Linting (`oxlint`)
-```bash
-$ npm run lint
-server: oxlint src — 0 errors, 0 warnings (23 files)
-client: oxlint — 0 errors, 0 warnings (25 files)
-```
-
-### 2. Automated Test Suite (`npm test`)
-```bash
-$ npm test
-✓ server (54 tests passed) in 640ms
-  - test/unit/urlAnalyzer.test.js (17 tests)
-  - test/unit/safeBrowsing.test.js (6 tests)
-  - test/unit/geminiAnalyzer.test.js (10 tests)
-  - test/integration/api.test.js (21 tests)
-✓ client (29 tests passed) in 1.99s
-  - src/test/RiskBadge.test.jsx (7 tests)
-  - src/test/ResultPage.test.jsx (8 tests)
-  - src/test/HistoryPage.test.jsx (6 tests)
-  - src/test/HomePage.test.jsx (8 tests)
-Total: 83 tests passed / 0 failed
-```
-
-### 3. Production Build (`npm run build`)
-```bash
-$ npm run build
-client: vite build — 40 modules transformed in 197ms
-  - dist/index.html (1.09 kB)
-  - dist/assets/index-*.css (67.75 kB | 11.04 kB gzip)
-  - dist/assets/index-*.js (347.19 kB | 102.74 kB gzip)
-server: prisma generate — generated client in 32ms
-```
-
----
-
-## 4. Final Folder Structure & Modified Files
-
-### A. Repository Source Structure
-```
+```text
 scamshield/
-├── client/
-│   ├── index.html                   # [Modified: Favicon link corrected]
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── vitest.config.js
-│   ├── public/
-│   │   ├── favicon.svg
-│   │   └── icons.svg
-│   └── src/
-│       ├── api/
-│       │   └── client.js            # [Modified: History type filter forwarded]
-│       ├── components/              # [Cleaned: Removed dead Card.jsx and Input.jsx]
-│       │   ├── Button.jsx
-│       │   ├── ErrorAlert.jsx
-│       │   ├── LoadingSpinner.jsx
-│       │   ├── Navbar.jsx
-│       │   ├── RiskBadge.jsx
-│       │   └── ShieldIcon.jsx
-│       ├── context/
-│       │   ├── ToastContext.js
-│       │   └── ToastProvider.jsx
-│       ├── hooks/
-│       │   └── useToast.js          # [Modified: Removed console.log fallback]
-│       ├── pages/
-│       │   ├── AboutPage.jsx
-│       │   ├── HistoryPage.jsx
-│       │   ├── HomePage.jsx
-│       │   ├── NotFoundPage.jsx
-│       │   ├── ResultPage.jsx       # [Modified: Optimistic rollback & error toasts]
-│       │   └── SafetyActionsPage.jsx# [Modified: Optimistic rollback & error toasts]
-│       ├── test/                    # [4 test files, 29 tests passing]
-│       ├── App.jsx
-│       ├── index.css
-│       └── main.jsx
 ├── server/
-│   ├── prisma/
-│   │   ├── migrations/
-│   │   │   ├── 20261008125144_init/
-│   │   │   └── 20261009112500_add_performance_indexes/ # [New: Index migration]
-│   │   └── schema.prisma            # [Modified: Performance indexes added]
 │   ├── src/
-│   │   ├── config/index.js
-│   │   ├── controllers/
-│   │   │   ├── analyzeController.js
-│   │   │   ├── healthController.js
-│   │   │   └── historyController.js
-│   │   ├── middleware/
+│   │   ├── constants/            # Central domain constants, risk levels, threat types, thresholds
+│   │   │   └── threatTypes.js
+│   │   ├── domain/               # Pure, side-effect-free, deterministic security engines
+│   │   │   ├── urlNormalization.js
+│   │   │   ├── urlHeuristics.js
+│   │   │   ├── messageSignals.js
+│   │   │   ├── riskClassification.js
+│   │   │   ├── safeBrowsingMapper.js
+│   │   │   ├── geminiValidation.js
+│   │   │   └── resultAssembler.js
+│   │   ├── integrations/         # Resilient external API clients with timeout enforcement
+│   │   │   ├── geminiClient.js
+│   │   │   └── safeBrowsingClient.js
+│   │   ├── repositories/         # Database access layer encapsulating Prisma operations
+│   │   │   ├── threatCheckRepository.js
+│   │   │   └── recommendationRepository.js
+│   │   ├── services/             # Orchestration and business logic
+│   │   │   ├── analysisPipeline.js  # Canonical 9-stage analysis pipeline
+│   │   │   ├── analysisService.js   # Service facade
+│   │   │   ├── historyService.js    # Paginated history business logic
+│   │   │   ├── geminiAnalyzer.js    # Backward-compatible facade
+│   │   │   ├── safeBrowsing.js      # Backward-compatible facade
+│   │   │   └── urlAnalyzer.js       # Backward-compatible facade
+│   │   ├── controllers/          # HTTP request/response translation
+│   │   │   ├── threatController.js
+│   │   │   ├── historyController.js
+│   │   │   └── recommendationController.js
+│   │   ├── validators/           # Input schema validation rules
+│   │   │   ├── threatValidators.js
+│   │   │   └── historyValidators.js
+│   │   ├── middleware/           # Cross-cutting HTTP concerns
 │   │   │   ├── errorHandler.js
+│   │   │   ├── validateRequest.js
 │   │   │   ├── rateLimiter.js
-│   │   │   ├── requestId.js
-│   │   │   ├── requestLogger.js
-│   │   │   └── validateRequest.js
-│   │   ├── routes/
-│   │   │   ├── analyze.js
-│   │   │   ├── health.js
-│   │   │   └── history.js
-│   │   ├── services/
-│   │   │   ├── analysisService.js
-│   │   │   ├── geminiAnalyzer.js
-│   │   │   ├── historyService.js    # [Modified: Database-level high_risk filtering]
-│   │   │   ├── safeBrowsing.js
-│   │   │   └── urlAnalyzer.js
-│   │   ├── utils/
-│   │   │   ├── logger.js
-│   │   │   └── prismaClient.js
-│   │   ├── validators/
-│   │   │   ├── analyzeValidators.js
-│   │   │   └── historyValidators.js # [Modified: Allowed high_risk and all in query]
-│   │   ├── app.js
-│   │   └── index.js
-│   ├── test/                        # [4 test files, 54 tests passing]
-│   └── package.json
-└── CODE_QUALITY_REPORT.md           # [New: This report]
+│   │   │   └── requestId.js
+│   │   └── utils/
+│   │       ├── apiError.js       # Unified API error serialization
+│   │       ├── logger.js
+│   │       └── prismaClient.js
+│   └── test/
+│       ├── unit/
+│       │   ├── domainEngines.test.js  # 32 pure domain engine tests
+│       │   ├── urlAnalyzer.test.js    # 17 heuristic tests
+│       │   ├── safeBrowsing.test.js   # 10 integration & fault tests
+│       │   ├── geminiAnalyzer.test.js # 10 schema & fallback tests
+│       │   └── geminiMocked.test.js   # 6 mocked SDK tests
+│       ├── integration/
+│       │   ├── api.test.js            # 21 end-to-end API route tests
+│       │   └── databaseService.test.js # 14 DB pagination & cascade tests
+│       └── securityPen.test.js        # 16 automated security pen-tests
+└── client/
+    ├── src/
+    │   ├── utils/
+    │   │   └── safetyHelpers.js   # Extracted pure helper functions for checklists & advisories
+    │   └── test/
+    │       ├── safetyHelpers.test.js # 6 client utility tests
+    │       ├── a11yAudit.test.jsx    # 7 axe-core accessibility tests
+    │       ├── a11yInteractive.test.jsx
+    │       ├── HomePage.test.jsx
+    │       ├── ResultPage.test.jsx
+    │       ├── SafetyActionsPage.test.jsx
+    │       ├── HistoryPage.test.jsx
+    │       ├── AboutPage.test.jsx
+    │       └── RiskBadge.test.jsx
 ```
 
-### B. Summary of Changed & Deleted Files
-| File | Action | Rationale |
-| :--- | :---: | :--- |
-| `client/index.html` | Modified | Fixed favicon `<link>` to point to existing `/favicon.svg`. |
-| `client/src/components/Card.jsx` | Deleted | Removed unused dead component containing invalid `:hover` inline style. |
-| `client/src/components/Input.jsx` | Deleted | Removed unused dead component. |
-| `client/src/hooks/useToast.js` | Modified | Replaced `console.log` fallback with clean no-op. |
-| `client/src/pages/ResultPage.jsx` | Modified | Added rollback on failed recommendation persistence, removed `console.warn`, added error toast. |
-| `client/src/pages/SafetyActionsPage.jsx` | Modified | Added rollback on failed recommendation persistence, removed `console.warn`, added error toast. |
-| `client/src/api/client.js` | Modified | Allowed forwarding `type` filter parameter (including `high_risk`) to server. |
-| `server/src/validators/historyValidators.js` | Modified | Allowed `all`, `url`, `message`, and `high_risk` in `query('type')`. |
-| `server/src/services/historyService.js` | Modified | Added database-level filtering for `where.riskLevel = 'high_risk'`. |
-| `server/prisma/schema.prisma` | Modified | Added performance indexes on `createdAt`, `inputType`, `riskLevel`, and `threatCheckId`. |
-| `server/prisma/migrations/20261009112500_add_performance_indexes/` | Created | SQLite migration to apply indexes. |
+---
+
+## 3. Canonical 9-Stage Analysis Pipeline
+
+All threat evaluation now executes through a deterministic, strictly ordered pipeline in `server/src/services/analysisPipeline.js`:
+
+```text
+[Stage 1: Input Validation]
+      ↓ (express-validator + domain guards)
+[Stage 2: Input Normalization]
+      ↓ (safeParseUrl, whitespace trimming, port standardisation)
+[Stage 3: Deterministic Analysis]
+      ↓ (evaluateUrlHeuristics for URLs / evaluateMessageSignals for messages)
+[Stage 4: Safe Browsing Reputation Lookup]
+      ↓ (Google Safe Browsing v4 threatMatches with 4s timeout)
+[Stage 5: Gemini Structured Interpretation]
+      ↓ (gemini-2.5-flash with SCAM_SHIELD_RESPONSE_SCHEMA & 7s timeout)
+[Stage 6: Gemini Output Validation & Sanitization]
+      ↓ (validateAndSanitizeGeminiResponse ensures typed, safe fields)
+[Stage 7: Deterministic Risk Classification & Reconciliation]
+      ↓ (reconcileRiskLevel enforces security invariants)
+[Stage 8: Persistence via Repository Layer]
+      ↓ (createThreatCheckRecord with relational safety recommendations)
+[Stage 9: Canonical Response Assembly]
+      ↓ (assembleUrlAnalysisResult / assembleMessageAnalysisResult with whyThisResult)
+[HTTP Response: 200 OK]
+```
+
+### Critical Security Invariants Enforced in Pipeline:
+1. **Google Safe Browsing Match Invariant**: If Safe Browsing returns a confirmed threat match, the final risk level is strictly `high_risk`. AI cannot downgrade confirmed threat reputation.
+2. **Deterministic Heuristic High-Risk Invariant**: If structural heuristics detect extreme risk (score $\ge 60$, brand impersonation, deceptive IP), the outcome is strictly `high_risk`.
+3. **Suspicious Downgrade Prevention Invariant**: If heuristics flag suspicious anomalies, Gemini cannot downgrade the verdict to `safe`.
+4. **Resilient Offline Degraded Mode**: If Gemini or Safe Browsing are unreachable or throttled, deterministic rule engines execute immediately without throwing unhandled exceptions.
+
+---
+
+## 4. Pure Domain Function Catalog
+
+Seven independent, 100% testable pure modules were extracted into `server/src/domain/`:
+
+| Module | Pure Functions | Description |
+| :--- | :--- | :--- |
+| `urlNormalization.js` | `safeParseUrl`, `isIpAddress`, `extractRootDomain`, `normalizeUrl` | Scheme guessing, hostname extraction, port normalization, multi-part TLD resolution (`.co.uk`, `.co.in`). |
+| `urlHeuristics.js` | `extractUrlFeatures`, `evaluateUrlHeuristics` | 11 structural checks (IP host, unencrypted HTTP, shortener, brand spoofing, excessive subdomains, hyphens, query params). |
+| `messageSignals.js` | `detectPaymentFraudSignals`, `detectOtpScamSignals`, `detectJobFraudSignals`, `detectPhishingSignals`, `detectMalwareSignals`, `detectConversationalSignals`, `evaluateMessageSignals` | Pure pattern and signature matching for UPI PIN scams, QR code fraud, OTP coercion, job deposits, APK malware, and benign chats. |
+| `riskClassification.js` | `reconcileRiskLevel`, `resolveThreatType`, `calculateConfidence` | Invariant enforcement between heuristics, external reputation, and LLM output. |
+| `safeBrowsingMapper.js` | `buildSafeBrowsingPayload`, `mapSafeBrowsingResponse`, `mapSafeBrowsingHttpError`, `mapSafeBrowsingException` | Converts between Google API wire format, HTTP status codes, and ScamShield `SafeBrowsingResult`. |
+| `geminiValidation.js` | `validateAndSanitizeGeminiResponse`, `buildMessageAnalysisPrompt`, `buildUrlAnalysisPrompt` | Validates, sanitizes, and defaults LLM structured JSON output. |
+| `resultAssembler.js` | `assembleWhyThisResult`, `generateFallbackRecommendations`, `assembleUrlAnalysisResult`, `assembleMessageAnalysisResult` | Formats final JSON responses and the explainable "Why this result?" breakdown. |
+
+---
+
+## 5. Unified API Error Handling
+
+All error responses across controllers, middleware, and validators now conform to the standardized error schema while preserving backwards-compatibility:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed",
+    "requestId": "req-9f2d01-a4b5",
+    "details": [
+      {
+        "field": "url",
+        "message": "Valid URL string is required"
+      }
+    ]
+  }
+}
+```
+
+- Created `server/src/utils/apiError.js` with `formatApiError`.
+- Created centralized `server/src/constants/threatTypes.js` defining standard `ERROR_CODES`:
+  - `VALIDATION_ERROR`, `RATE_LIMITED`, `NOT_FOUND`, `RECORD_NOT_FOUND`, `BAD_REQUEST`, `CORS_FORBIDDEN`, `DATABASE_ERROR`, `SERVICE_UNREACHABLE`, `TIMEOUT`, `PAYLOAD_TOO_LARGE`, `SERVER_ERROR`, `INTERNAL_ERROR`.
+- Updated `errorHandler.js` and `validateRequest.js` to format errors uniformly.
+
+---
+
+## 6. Frontend Helper Extraction
+
+Extracted repetitive state and formatting logic into `client/src/utils/safetyHelpers.js`:
+- `extractSafetySteps(result)`: Extracts and unifies safety steps from both relational records (`safetyRecommendations`) and serialized JSON (`safetyStepsJson`).
+- `formatSecurityAdvisory(data)`: Plain-language security warning generator formatted for clipboard copying.
+- `downloadJsonReport(data, filename)`: Safe Blob creation and browser download triggering.
+- Updated `ResultPage.jsx` and `SafetyActionsPage.jsx` to consume shared helpers.
+- Added comprehensive unit test suite in `client/src/test/safetyHelpers.test.js`.
+
+---
+
+## 7. Verification Results
+
+```bash
+# Linter Verification
+$ npm run lint
+Oxlint: 0 warnings and 0 errors across 68 files (Finished in 56ms)
+
+# Server Test Suite & Coverage
+$ npm --prefix server run test:coverage
+Test Files  8 passed (8)
+Tests       126 passed (126)
+Statements  84.81%
+Branches    71.38%
+Functions   88.81%
+Lines       85.87%
+
+# Client Test Suite & Coverage
+$ npm --prefix client run test:coverage
+Test Files  9 passed (9)
+Tests       56 passed (56)
+Statements  79.28%
+Branches    65.41%
+Functions   67.91%
+Lines       81.60%
+
+# Client Production Build
+$ npm --prefix client run build
+✓ 41 modules transformed.
+dist/index.html 1.09 kB (gzip: 0.56 kB)
+dist/assets/index-D2N7Trdy.js 271.28 kB (gzip: 85.94 kB)
+✓ built in 149ms
+```

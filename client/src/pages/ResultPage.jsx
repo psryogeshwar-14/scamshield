@@ -6,6 +6,11 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorAlert from '../components/ErrorAlert';
 import { useToast } from '../hooks/useToast';
 import api from '../api/client';
+import {
+  extractSafetySteps,
+  formatSecurityAdvisory,
+  downloadJsonReport,
+} from '../utils/safetyHelpers';
 
 export default function ResultPage() {
   const { id } = useParams();
@@ -16,26 +21,7 @@ export default function ResultPage() {
   const [data, setData] = useState(location.state?.result || null);
   const [loading, setLoading] = useState(!location.state?.result);
   const [error, setError] = useState(null);
-  function extractSteps(res) {
-    if (!res) return [];
-    if (res.safetyRecommendations && res.safetyRecommendations.length > 0) {
-      return res.safetyRecommendations.map((r) => ({
-        id: r.id,
-        action: r.action,
-        completed: Boolean(r.completed),
-      }));
-    }
-    if (Array.isArray(res.safetySteps) && res.safetySteps.length > 0) {
-      return res.safetySteps.map((step, idx) => ({
-        id: `step-${idx}`,
-        action: step,
-        completed: false,
-      }));
-    }
-    return [];
-  }
-
-  const [steps, setSteps] = useState(() => extractSteps(location.state?.result));
+  const [steps, setSteps] = useState(() => extractSafetySteps(location.state?.result));
 
   // Fetch from API if not passed via route state
   useEffect(() => {
@@ -68,7 +54,7 @@ export default function ResultPage() {
 
         if (isMounted) {
           setData(normalized);
-          setSteps(extractSteps(normalized));
+          setSteps(extractSafetySteps(normalized));
         }
       } catch (err) {
         if (isMounted) {
@@ -127,13 +113,7 @@ export default function ResultPage() {
   };
 
   const handleCopyAdvisory = () => {
-    const threatName = (data.threatType || 'threat').replace(/_/g, ' ').toUpperCase();
-    const risk = (data.riskLevel || 'UNKNOWN').toUpperCase();
-    const action = data.recommendedAction || 'Exercise caution.';
-    const summary = data.summary || '';
-
-    const text = `🚨 *SCAMSHIELD SECURITY ADVISORY* 🚨\nRisk Level: ${risk}\nThreat Classification: ${threatName}\n\n⚠️ Immediate Directive:\n${action}\n\n💡 Plain-Language Summary:\n${summary}\n\nProtected by ScamShield AI Digital Safety Assistant`;
-
+    const text = formatSecurityAdvisory(data);
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text);
       addToast('Security advisory copied! Ready to share.', 'success');
@@ -141,13 +121,7 @@ export default function ResultPage() {
   };
 
   const handleExportJSON = () => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `scamshield-report-${data.id || 'scan'}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadJsonReport(data);
     addToast('Downloaded JSON report', 'success');
   };
 

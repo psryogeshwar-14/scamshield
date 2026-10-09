@@ -1,4 +1,6 @@
 import { validationResult } from 'express-validator';
+import { formatApiError } from '../utils/apiError.js';
+import { ERROR_CODES } from '../constants/threatTypes.js';
 
 /**
  * Middleware that checks express-validator results.
@@ -8,19 +10,20 @@ import { validationResult } from 'express-validator';
 export function validateRequest(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      error: {
+    const details = errors.array().map((e) => ({
+      field: e.path || (e.param ? e.param : 'unknown'),
+      message: e.msg,
+      value: e.value !== undefined ? String(e.value).slice(0, 50) : undefined,
+    }));
+
+    return res.status(400).json(
+      formatApiError({
+        code: ERROR_CODES.VALIDATION_ERROR,
         message: 'Validation failed',
-        code: 'VALIDATION_ERROR',
         requestId: req?.id || 'unknown',
-        details: errors.array().map((e) => ({
-          field: e.path || (e.param ? e.param : 'unknown'),
-          message: e.msg,
-          value: e.value !== undefined ? String(e.value).slice(0, 50) : undefined,
-        })),
-      },
-    });
+        details,
+      })
+    );
   }
   next();
 }

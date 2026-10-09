@@ -1,10 +1,38 @@
-import prisma from '../utils/prismaClient.js';
 import { createError } from '../middleware/errorHandler.js';
+import {
+  findThreatChecksWithPagination,
+  countThreatChecks,
+  findThreatCheckById,
+  deleteThreatCheckById,
+} from '../repositories/threatCheckRepository.js';
+import {
+  findRecommendationById,
+  updateRecommendationCompletion,
+} from '../repositories/recommendationRepository.js';
+
+/**
+ * historyService.js
+ * ──────────────────
+ * Service managing persistence queries, record retrieval, and recommendation state.
+ * Encapsulates business logic and delegates database queries to repositories.
+ */
 
 /**
  * Retrieves paginated threat check history records ordered newest-first.
+ *
+ * @param {Object} options
+ * @param {number} [options.page=1]
+ * @param {number} [options.limit=20]
+ * @param {string|null} [options.type=null]
+ * @param {boolean} [options.includeRecommendations=false]
+ * @returns {Promise<{records: Array<Object>, pagination: Object}>}
  */
-export async function getHistoryRecords({ page = 1, limit = 20, type = null, includeRecommendations = false } = {}) {
+export async function getHistoryRecords({
+  page = 1,
+  limit = 20,
+  type = null,
+  includeRecommendations = false,
+} = {}) {
   const safePage = Math.max(1, parseInt(page, 10) || 1);
   const safeLimit = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
   const skip = (safePage - 1) * safeLimit;
@@ -17,11 +45,10 @@ export async function getHistoryRecords({ page = 1, limit = 20, type = null, inc
   }
 
   const [total, checks] = await Promise.all([
-    prisma.threatCheck.count({ where }),
-    prisma.threatCheck.findMany({
+    countThreatChecks(where),
+    findThreatChecksWithPagination({
       where,
-      orderBy: { createdAt: 'desc' },
-      ...(includeRecommendations ? { include: { safetyRecommendations: true } } : {}),
+      includeRecommendations,
       skip,
       take: safeLimit,
     }),
@@ -43,16 +70,16 @@ export async function getHistoryRecords({ page = 1, limit = 20, type = null, inc
 
 /**
  * Retrieves a single analysis record by ID with relations.
+ *
+ * @param {string} id
+ * @returns {Promise<Object>}
  */
 export async function getHistoryRecordById(id) {
   if (!id) {
     throw createError('Record ID is required.', 400, 'INVALID_ID');
   }
 
-  const check = await prisma.threatCheck.findUnique({
-    where: { id },
-    include: { safetyRecommendations: true },
-  });
+  const check = await findThreatCheckById(id);
 
   if (!check) {
     throw createError('Security analysis record not found.', 404, 'RECORD_NOT_FOUND');
@@ -63,23 +90,22 @@ export async function getHistoryRecordById(id) {
 
 /**
  * Deletes an analysis record and cascades associated recommendations.
+ *
+ * @param {string} id
+ * @returns {Promise<{deletedId: string, message: string}>}
  */
 export async function deleteHistoryRecord(id) {
   if (!id) {
     throw createError('Record ID is required.', 400, 'INVALID_ID');
   }
 
-  const existing = await prisma.threatCheck.findUnique({
-    where: { id },
-  });
+  const existing = await findThreatCheckById(id);
 
   if (!existing) {
     throw createError('Record not found or already deleted.', 404, 'RECORD_NOT_FOUND');
   }
 
-  await prisma.threatCheck.delete({
-    where: { id },
-  });
+  await deleteThreatCheckById(id);
 
   return {
     deletedId: id,
@@ -89,6 +115,11 @@ export async function deleteHistoryRecord(id) {
 
 /**
  * Updates or toggles completion status for a specific safety step recommendation.
+ *
+ * @param {string} id - Parent ThreatCheck ID
+ * @param {string} recId - SafetyRecommendation ID
+ * @param {boolean} [completed=true]
+ * @returns {Promise<Object>}
  */
 export async function updateRecommendationStatus(id, recId, completed = true) {
   if (!recId) {
@@ -97,20 +128,13 @@ export async function updateRecommendationStatus(id, recId, completed = true) {
 
   const isCompleted = typeof completed === 'boolean' ? completed : true;
 
-  const rec = await prisma.safetyRecommendation.findUnique({
-    where: { id: recId },
-  });
+  const rec = await findRecommendationById(recId);
 
   if (!rec) {
     throw createError('Recommendation not found.', 404, 'REC_NOT_FOUND');
   }
 
-  const updated = await prisma.safetyRecommendation.update({
-    where: { id: recId },
-    data: { completed: isCompleted },
-  });
-
-  return updated;
+  return updateRecommendationCompletion(recId, isCompleted);
 }
 
 export default {
